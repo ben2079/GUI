@@ -1,0 +1,45 @@
+{
+  "$schema_version": "1.0",
+  "jobtitel": "Koordinator (m/w/d) IT Servicedesk, im Bereich IT",
+  "arbeitgeber": "Ursapharm Arzneimittel GmbH",
+  "arbeitsort": "Saarbrücken",
+  "anstellungsart": "Vollzeit",
+  "befristung": "unbefristet",
+  "beginn": "ab sofort",
+  "berufsbezeichnung": "IT-Produktkoordinator/in",
+  "mission": "Unsere Mitarbeiter stellen hochwertigste Markenprodukte für die Gesundheit her. Die stabile und außergewöhnliche Qualität unserer Produkte gründet unter anderem auf unserem Innovationsgeist, dem uneingeschränkten Qualitätsbewusstsein und unserer besonderen Qualitätskultur. Wir suchen Sie als engagierte/n Koordinator oder Koordinatorin des IT-Servicedesk für unseren Bereich IT in Saarbrücken, wenn Sie sich mit Know-how und Einsatzbereitschaft in Vollzeit einbringen möchten. Aufgaben: Koordination des Servicedesk-Teams; Mitarbeit/Überprüfung besonderer Tickets; Überwachung von Eskalationen; Ursachenanalyse und Maßnahmen; Customizing/Optimierung des Ticket-Systems; Etablierung von KPIs; Endpoint-Verwaltung (Beschaffung, Asset Management).",
+  "aufgaben": [
+    "Koordination des Servicedesk-Teams zur Sicherstellung der effizienten, zuverlässigen Bearbeitung der Anfragen interner IT-Anwender",
+    "Mitarbeit bei und Überprüfung von schwierigen bzw. besonderen Tickets",
+    "Überwachung und Betreuung von Eskalationen zur Unterstützung schneller, prozesstreuer Lösungen",
+    "Analyse von Ursachen für Lösungsverzögerungen oder Incidents und Ableitung geeigneter Maßnahmen",
+    "Customizing und Optimierung des Ticket-Systems",
+    "Etablierung von KPIs zur Steuerung eines erfolgreichen Servicedesks",
+    "Zuständigkeit für die Endpoint-Verwaltung (Beschaffung, Asset Management)"
+  ],
+  "profil": [
+    "Abgeschlossene Ausbildung zum Fachinformatiker (m/w/d) oder vergleichbar",
+    "Erfahrung im IT-Support",
+    "Erfahrung in der Koordination eines IT-Service-Teams",
+    "Erfahrung in Administration und Konfiguration von Ticket-Systemen (z. B. TOPdesk), Servicedesk-Prozessen, gängigen IT-Standards und ITIL-Framework",
+    "Strukturierte, organisierte, prozessorientierte und eigenständige Arbeitsweise",
+    "Zuverlässigkeit, Verantwortungs- und Qualitätsbewusstsein",
+    "Service- und lösungsorientiertes Arbeiten, analytische und konzeptionelle Stärke, Fähigkeit, Probleme schnell zu erfassen",
+    "Sichere Kommunikation mit verschiedenen Ansprechpartnern im Unternehmen",
+    "Sehr gute Deutschkenntnisse in Wort und Schrift; gute Englischkenntnisse von Vorteil"
+  ],
+  "angebot": [
+    "Krisen- und zukunftssicherer Arbeitsplatz in der wachsenden Pharmabranche",
+    "Teil eines innovativen und modernen Familienunternehmens",
+    "Vielseitige Tätigkeiten und Aufgaben in einem spannenden Arbeitsumfeld",
+    "Ausführliche und fundierte fachliche Einarbeitung",
+    "Langfristige Perspektiven und interne Weiterentwicklungsmöglichkeiten",
+    "Attraktive Vergütung gemäß Chemie-Tarifvertrag",
+    "Zusammenarbeit mit motivierten und professionellen KollegInnen"
+  ],
+  "gehalt": "Vergütung gemäß Chemie-Tarifvertrag (konkrete Angaben nicht genannt)",
+  "bewerbungsart": "E-Mail (alternativ Arbeitgeber-Website)",
+  "anschrift_arbeitgeber": "Industriestr. 35, 66129 Saarbrücken",
+  "email": "bewerbung@ursapharm.de",
+  "telefon": "+49 6805 9292727"
+}

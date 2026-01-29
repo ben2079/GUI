@@ -1,0 +1,8 @@
+[
+        "/* _assistant_msg_with_tool_call_msg */",                                  
+        {
+            "role"        : "tool",
+            "tool_call_id": "call_id",
+            "content"     : "json.dumps(tool_result)"
+        }
+    ]

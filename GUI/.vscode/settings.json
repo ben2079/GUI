@@ -1,0 +1,7 @@
+{
+    "python.testing.pytestArgs": [
+        "AI_IDE_v1756"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}

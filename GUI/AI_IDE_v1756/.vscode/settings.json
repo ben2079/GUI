@@ -1,0 +1,23 @@
+{
+    "python.analysis.supportAllPythonDocuments": true,
+    "python.analysis.diagnosticsSource": "Pyright",
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.autoImportCompletions": false,
+    "chat.editor.fontSize": 13,
+    "chat.fontSize": 13,
+    "markdown.preview.fontSize": 15,
+    "editor.fontSize": 15,
+    "debug.console.fontSize": 15,
+    "scm.inputFontSize": 15,
+    "terminal.integrated.fontSize": 15,
+    "editor.minimap.sectionHeaderFontSize": 12,
+    "editor.fontVariations": false,
+    "python-envs.pythonProjects": [
+        {
+            "path": "",
+            "envManager": "ms-python.python:system",
+            "packageManager": "ms-python.python:pip"
+        }
+    ],
+    "python.REPL.enableREPLSmartSend": false
+}
