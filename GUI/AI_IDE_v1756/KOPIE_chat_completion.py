@@ -990,7 +990,7 @@ class ChatComE(ChatClassCompletion,ChatHistory):
                     return file.write(f"{w}")        
 
 #if __name__ == "__main__":
-##chat_comp = ChatComp("gpt-4o", api_key="sk-proj-4ULoT1TjmSbrjYy5N181T3BlbkFJmkpgpWsLoN52lWePNmKp",input_text="What is the weather like today?",filename="editor")
+##chat_comp = ChatComp("gpt-4o", api_key="your-api-key-here",input_text="What is the weather like today?",filename="editor")
 #print(chat_comp.response())
 '''
 # CALL THE IMAGE DESCRIPTION CLASS
