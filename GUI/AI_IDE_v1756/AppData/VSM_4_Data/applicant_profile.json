@@ -1,5 +1,4 @@
 {
-    "profile_id": "profile:44e8fce720b6ef2f385478d7f1123027caa7a148abc37af870c7522f0ccf6040",
     "personal_info": {
         "full_name": "Benjamin Röder",
         "date_of_birth": "1989-01-06",
@@ -10,17 +9,14 @@
         "linkedin": null,
         "portfolio": null
     },
-    "professional_summary": "Angehender Fachinformatiker für Anwendungsentwicklung (IHK, laufend) mit solider Praxis in IT-Systembetrieb und Troubleshooting sowie wachsendem Schwerpunkt auf Python-Entwicklung. Ich arbeite produktnah an LLM-/RAG-Themen (Ingestion, Embeddings, FAISS-Retrieval, Tool-Calling) und verbinde dabei saubere Datenpipelines mit benutzerorientierter Umsetzung. Stärken: analytisches Vorgehen, klare Kommunikation und zuverlässige Umsetzung im Team.",
+    "professional_summary": "",
     "experience": [
         {
             "title": "Servicetechniker Repair Desk",
             "company": "Tec Repair GmbH",
             "duration": "01/2018 – 03/2024",
             "description": "Reparatur und Wartung von IT-Systemen, Datenübertragungen, Betriebssystem-Reparaturen, Schwerpunkt Apple-Produkte.",
-            "achievements": [
-                "Spezialist für Apple-Hardware (zertifiziert)",
-                "Einarbeitung neuer Mitarbeitender"
-            ]
+            "achievements": []
         },
         {
             "title": "Selbstständiger Medienberater",
@@ -62,25 +58,32 @@
     ],
     "skills": {
         "technical": [
-  
-            "Python 3.8+",
-            "PySide6,Qt5",
-            "FastAPI, Django",
-            "Applied AI/LLM",
-            "RAG Systems",
-            "PostgreSQL, MongoDB",
-            "Docker, Kubernetes Basics",
-            "Git, GitHub",
-            "Linux/Ubuntu",
-            "REST APIs"           
-
+            "Python (2 Jahre, OOP, Data Stack)",
+            "C++ (Grundlagen)",
+            "SQL",
+            "Git",
+            "Linux Administration",
+            "Windows Administration",
+            "PyQt6/GUI Development",
+            "LangChain",
+            "RAG (Retrieval-Augmented Generation)",
+            "Vector Stores/Embeddings",
+            "MCP (Model Context Protocol)",
+            "Agent Architectures",
+            "Jupyter",
+            "TensorFlow/Keras",
+            "scikit-learn",
+            "REST APIs",
+            "Docker (Einführung)",
+            "OpenAI API",
+            "IT-Systeme: Installation, Repair, Maintenance",
+            "Apple Products (zertifiziert)"
         ],
         "soft": [
-            "Analytisches Denken",
-            "Klare Kommunikation",
-            "Nutzer-Empathie",
-            "Agile Teamarbeit",
-            "Selbstorganisation"
+            "Analytical thinking",
+            "Concise communication",
+            "User empathy",
+            "Agile teamwork"
         ],
         "languages": [
             "German (native)",
@@ -92,19 +95,10 @@
     ],
     "projects": [
         {
-            "title": "AI-IDE / Agent-Workstation (Desktop App) mit RAG und MCP-Tools",
-            "year": "2025–2026",
-            "tech": [
-                "Python",
-                "PySide6",
-                "OpenAI API",
-                "LangChain",
-                "FAISS",
-                "LLM",
-                "HuggingFace Embeddings",
-                "MCP"
-            ],
-            "impact": "Lokale AI-IDE mit Multi Agentic Systems und RAG-Pipeline (Dokument-Ingestion → Embeddings → FAISS → Retrieval) inkl. MCP-Tool-Exposition; produktnahe UX durch GUI und persistente lokale Knowledge-Sources."
+            "title": "AI-IDE mit Agent-System und RAG",
+            "year": "2025-2026",
+            "tech": ["Python", "PyQt6", "LangChain", "OpenAI API", "MCP", "RAG", "Vector Stores"],
+            "impact": "Entwicklung einer KI-gestützten IDE mit Agenten-Architektur, Cover-Letter-Generator, Profile-Parser und MCP-Server-Integration für automatisierte Bewerbungsprozesse"
         },
         {
             "title": "Inventory-forecast micro-service",
@@ -124,21 +118,15 @@
         "language": "de",
         "focus_areas": [
             "Python/OOP/Data",
-            "LLM-Integration (Agentic Systems)",
-            "RAG / Vector Stores (FAISS)",
-            "Desktop-GUI (PySide6)",
             "APIs/REST",
             "Forecasting/ML Basics",
             "IT-Systempraxis",
-            "Monitoring/Automation",
             "Agiles Arbeiten"
         ]
     },
     "additional_information": {
         "travel_willingness": null,
         "work_authorization": "Germany (citizen)",
-        "marital_status": "single",
-        "drivers_license": "B",
-        "availability": "sofort bzw. 2 Wochen Kündigungsfrist"
+        "marital_status": "single"
     }
 }

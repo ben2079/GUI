@@ -1,7 +1,7 @@
 {
   "PROJECTS": {
     "AI_IDE_v1756": {
-      "path": "/home/ben/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/ai_ide",
+      "path": "/home/ben/Vs_Code_Projects/Projects/GUI/GUI/AI_IDE_v1756/ai_ide",
       "files": [
         "ai_ide_v1756.py",
         "jstree_widget.py",
