@@ -9,7 +9,18 @@ from __future__ import annotations    ## ai_ide_v1756.py
 # – end of instrcus ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– –
 
 import os
+import os
 import sys
+import base64
+import binascii
+import uuid
+from datetime import datetime
+from pathlib import Path
+
+_HERE = Path(__file__).resolve().parent
+_PARENT = _HERE.parent
+if str(_HERE) not in sys.path:
+    sys.path.insert(0, str(_HERE))
 
 # Workaround für GNOME GLib-GIO-ERROR mit antialiasing
 # Verhindert Crash durch fehlende GNOME-Settings-Keys
@@ -20,7 +31,6 @@ os.environ.setdefault('QT_QPA_PLATFORM', 'xcb')
 import warnings
 warnings.filterwarnings('ignore', category=Warning)
 from PIL import Image
-from pathlib import Path
 from typing import Final, List, Optional
 from io import BytesIO
 import mimetypes
@@ -100,7 +110,12 @@ from PySide6.QtWidgets import (
 #  3rd-party back-end  (neighbour module)
 # --------------------------------------------------------------------------
 
-from ai_ide.chat_completion import ChatCom, ImageDescription, ImageCreate, ChatHistory  # noqa: E402
+try:
+    from ai_ide.chat_completion import ChatCom, ImageDescription, ImageCreate, ChatHistory  # type: ignore  # noqa: E402
+except Exception:
+    if str(_PARENT) not in sys.path:
+        sys.path.insert(0, str(_PARENT))
+    from ai_ide.chat_completion import ChatCom, ImageDescription, ImageCreate, ChatHistory  # type: ignore  # noqa: E402
 # --------------------------------------------------------------------------
 from ai_ide.litehigh import QSHighlighter
 
@@ -1369,7 +1384,13 @@ from PySide6.QtWidgets import (QMainWindow,
 import json
 import typing as _t
 from pathlib import Path
-from ai_ide.chat_completion import ChatHistory
+
+try:
+    from ai_ide.chat_completion import ChatHistory
+except Exception:
+    if str(_PARENT) not in sys.path:
+        sys.path.insert(0, str(_PARENT))
+    from ai_ide.chat_completion import ChatHistory
 from ai_ide.litehigh import QSHighlighter
 from PySide6.QtCore import (
      Qt,

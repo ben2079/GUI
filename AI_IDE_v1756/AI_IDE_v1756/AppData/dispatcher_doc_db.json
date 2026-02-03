@@ -100,6 +100,36 @@
       "last_seen_at": "2026-01-22T11:50:56.960092Z",
       "processed": false,
       "processing_state": "queued"
+    },
+    "f777f759ee10fea7a525f749929a923bc229a0e8de3e247e9f5497be1d868099": {
+      "id": "f777f759ee10fea7a525f749929a923bc229a0e8de3e247e9f5497be1d868099",
+      "content_sha256": "f777f759ee10fea7a525f749929a923bc229a0e8de3e247e9f5497be1d868099",
+      "source_path": "/home/ben/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/AI_IDE_v1756/AppData/VSM_4_Data/Full_Stack_Software_Engineer.pdf",
+      "file_size_bytes": 61253,
+      "mtime_epoch": 1769102934,
+      "last_seen_at": "2026-02-03T18:20:37.617240Z",
+      "processed": false,
+      "processing_state": "queued"
+    },
+    "949aee130cef660a42fc93d78a95a87c76cea152ad265283e774024722f8bbe7": {
+      "id": "949aee130cef660a42fc93d78a95a87c76cea152ad265283e774024722f8bbe7",
+      "content_sha256": "949aee130cef660a42fc93d78a95a87c76cea152ad265283e774024722f8bbe7",
+      "source_path": "/home/ben/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/AI_IDE_v1756/AppData/VSM_4_Data/Fullstack Software Entwickler (m_w_d) bei Blue Alpha GmbH.pdf",
+      "file_size_bytes": 151455,
+      "mtime_epoch": 1769119330,
+      "last_seen_at": "2026-02-03T18:20:37.617240Z",
+      "processed": false,
+      "processing_state": "queued"
+    },
+    "443d06a29ba36ac17cf5c7928fcfe3e317d0a7380f81d817875df1fa2a9e9935": {
+      "id": "443d06a29ba36ac17cf5c7928fcfe3e317d0a7380f81d817875df1fa2a9e9935",
+      "content_sha256": "443d06a29ba36ac17cf5c7928fcfe3e317d0a7380f81d817875df1fa2a9e9935",
+      "source_path": "/home/ben/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/AI_IDE_v1756/AppData/VSM_4_Data/Wir suchen Verstärkung für unseren IT-Bereich bei Frank Handels GmbH & Co. KG.pdf",
+      "file_size_bytes": 101836,
+      "mtime_epoch": 1763535023,
+      "last_seen_at": "2026-02-03T18:20:37.617240Z",
+      "processed": false,
+      "processing_state": "queued"
     }
   }
 }
