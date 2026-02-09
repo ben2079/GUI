@@ -4,6 +4,12 @@ This repository contains the **AI IDE v1756** project (Python + PySide6/Qt) with
 
 ## Quickstart
 
+If you cloned without submodules, initialize them first:
+
+```bash
+git submodule update --init --recursive
+```
+
 Create a virtualenv and install editable:
 
 ```bash
