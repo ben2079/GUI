@@ -38,6 +38,10 @@ AI_IDE_v1756/_Comments/
 **/sessions.db
 **/sessions.db-*
 
+# AppData (runtime/private). Keep only tracked README files.
+**/AppData/**
+!**/AppData/README.md
+
 # App runtime data (private / machine-specific)
 dispatcher_doc_db.json
 **/dispatcher_doc_db.json
