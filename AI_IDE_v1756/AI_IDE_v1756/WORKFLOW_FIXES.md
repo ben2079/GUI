@@ -157,7 +157,7 @@ OUTPUT (JSON only):
 
 2. Run full workflow test:
    ```bash
-   cd /home/ben/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/ai_ide
+    cd AI_IDE_v1756/AI_IDE_v1756/ai_ide
    python3 -c "
    from chat_completion import ChatCom
    from agents_factory import AGENTS_REGISTRY

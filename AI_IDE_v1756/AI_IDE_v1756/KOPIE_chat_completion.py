@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-#  Author: benjamin r.
-#  Email: bendr2024@gmail.com
+#  Author: project maintainer
+#  Contact: see README
 
 from openai import OpenAI
 import base64
@@ -158,7 +158,7 @@ class Caller(ChatClassCompletion):
         self.file:str = ""                                # first partof title file to write
         
         if len(sys.argv) >=2: self.path_read = sys.argv[1] 
-        else: self.path_read = "/home/ben/Vs_Code_Projects/Projects/GUI/*/*"
+        else: self.path_read = str(Path.cwd() / "*" / "*")
         
         self.workdir:str = GetPath().get_workdir()        # type: ignore # path to current working directory
         self.path_new:str = ""                            # get file from sys.arg[]
@@ -994,7 +994,7 @@ class ChatComE(ChatClassCompletion,ChatHistory):
 #print(chat_comp.response())
 '''
 # CALL THE IMAGE DESCRIPTION CLASS
-image_description = ImageDescription(api_key,"gpt-4o","/home/benjamin/Bilder/img-JtXFEybUcysfKe1ItBGoL7oQ.png","Describe this image")
+image_description = ImageDescription(api_key,"gpt-4o","path/to/image.png","Describe this image")
 image_description.get_descript().choices[0].message.content'''
 
 
@@ -1030,7 +1030,7 @@ Vs_Code_Projects/Debugger/debug_file.txt & python3 Vs_Code_Projects/Debugger/Cha
 """
 if __name__ == "__main__":  
 
-    orpath = "/home/ben/rescue/Videos/Vs_Code_Projects/Projects/GUI/AI_IDE_v1751/"
+    orpath = str(Path(__file__).resolve().parent)
     api_key = ChatClassCompletion._read_api_key()
     path = os.path.join(orpath)
 

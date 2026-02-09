@@ -1,7 +1,0 @@
-2026-01-21 18:29:08,384 [INFO] torch_init: CUDA_VISIBLE_DEVICES vor torch-Import gesetzt auf: 0
-QMainWindow::saveState(): 'objectName' not set for QToolBar 0x25302ec0 'Main'
-QMainWindow::saveState(): 'objectName' not set for QToolBar 0x25323630 ''
-QMainWindow::saveState(): 'objectName' not set for QToolBar 0x251a7450 ''
-[INFO] Tree data loaded from /home/ben/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/AppData/tree_data.json
-[INFO] Tree data saved to /home/ben/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/AppData/tree_data.json
-temporery_file: /home/ben/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756//AppData/VSM_3_Data/history.json.tmp

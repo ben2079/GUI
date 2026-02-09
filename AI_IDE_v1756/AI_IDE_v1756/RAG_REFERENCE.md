@@ -299,12 +299,12 @@ pip install faiss-gpu
 import os
 
 # API Key setzen
-os.environ["OPENAI_API_KEY"] = "sk-..."
+os.environ["OPENAI_API_KEY"] = "YOUR_OPENAI_API_KEY"
 
 # Oder in Config übergeben
 config = EmbeddingConfig(
     backend="openai",
-    openai_api_key="sk-..."
+    openai_api_key="YOUR_OPENAI_API_KEY"
 )
 ```
 

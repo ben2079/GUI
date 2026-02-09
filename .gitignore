@@ -1,0 +1,83 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+
+# Packaging
+*.egg-info/
+dist/
+build/
+
+# OS / editor
+.DS_Store
+.vscode/
+
+# Internal notes (not part of reference source)
+AI_IDE_v1756/_Comments/
+
+# Logs
+*.log
+
+# Local secrets
+**/.env
+**/.env.*
+!.env.example
+!.env.*.example
+
+# SQLite / local state
+**/sessions.db
+**/sessions.db-*
+
+# App runtime data (private / machine-specific)
+dispatcher_doc_db.json
+**/dispatcher_doc_db.json
+**/db.json
+**/history.json
+**/history copy.json
+**/history*.legacy.*
+**/_ctr_
+
+# Vector stores / embeddings / indexes
+**/*.faiss
+**/*.pkl
+**/manifest.json
+**/simple_index/
+
+# Generated assets
+**/AppData/generated/
+**/AppData/icon_cache/
+**/AppData/tree_data.json
+
+# History templates (often contain captured chat content / secrets)
+**/AppData/templates/history_save_json.json
+
+# Local AppData inside package (often contains personal artifacts)
+**/ai_ide/AppData/
+
+# Local interactive dumps
+**/ai_ide/USER INPUT*
+**/ai_ide/USER_) INPUT*
+
+# Office / design files (usually not part of source)
+**/*.docx
+**/*.odg
+
+# Keep SVG icons, but ignore photo/binary drops in symbols
+**/symbols/*.png
+**/symbols/*.jpg
+**/symbols/*.jpeg
+
+# Personal/job-documents & outputs
+**/AppData/VSM_*_Data/
+**/Cover_letters/
+**/*.pdf
