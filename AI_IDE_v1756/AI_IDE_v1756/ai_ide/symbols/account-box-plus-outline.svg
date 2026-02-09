@@ -1,0 +1,426 @@
+##
+##
+##  1.-
+##    -  nur Borderline und Symbole Blau bei den Buttons einfärben einfärben 
+##    -  hintergrund bleibt in widgetfarbe
+
+'''
+
+'''
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+from typing import Final
+
+from ChatClassCompletion import ChatCom
+from PySide6.QtCore import Qt, Slot, QSize
+from PySide6.QtGui import QAction, QPainter, QIcon
+from PySide6.QtWidgets import (
+    QApplication,
+    QFileDialog,
+    QDockWidget,
+    QGraphicsScene,
+    QGraphicsView,
+    QHBoxLayout,
+    QLabel,
+    QMainWindow,
+    QMessageBox,
+    QPushButton,
+    QSplitter,
+    QStatusBar,
+    QTabWidget,
+    QTextEdit,
+    QToolBar,
+    QVBoxLayout,
+    QWidget,
+    QMenuBar,
+    QStyle
+)
+
+# ──────────────────────────────────────────────────────────────
+#  Styles
+# ──────────────────────────────────────────────────────────────
+SCHEME_BLUE  = {"col1": "#3a5fff", "col2": "#6280ff"}
+SCHEME_GREEN = {"col1": "#0fe913", "col2": "#58ed5b"}
+SCHEME_GREY  = {"col5": "#161616", "col6": "#E3E3DED6", "col7": "#1F1F1F", "col8": "#E3E3DED6"}
+SCHEME_DARK  = {"col5": "#1F1F1F", "col6": "#E3E3DED6", "col7": "#161616", "col8": "#E3E3DED6"}
+
+STYLE_TEMPLATE = '''
+QMainWindow, QToolBar, QStatusBar, QDockWidget, QWidget {{
+    background:  {col5};
+    color:       {col6};
+    font-size:   20px;
+}}
+QTabBar::tab:selected {{ background: #444; }}
+QTextEdit, QLineEdit  {{ background: {col7}; color:{col6};
+}}
+
+QSplitter::handle:horizontal {{
+    border-left: 3px solid {col1};
+}}
+QSplitter::handle:vertical {{
+    border-top: 3px solid {col1};
+}}
+QSplitter::handle:hover,
+QSplitter::handle:pressed {{ border-color: {col2}; }}
+'''
+
+BTN_STYLE = '''
+/* Grundzustand -------------------------------------------------------- */
+QPushButton {{
+    background      : none;       /* NICHT einfärben            */
+    color           : noone;             /* Text  / currentColor     */
+    border          : 1px solid none;   /* Akzent-Farbe nur der Rahmen*/
+    border-radius   : 4px;
+    padding         : 4px 6px;
+}}
+
+/* Hover / Maus darüber ----------------------------------------------- */
+QPushButton:hover {{
+    color: {col1};
+    border: 1px solid {col1};
+}}
+
+/* Gedrückt ------------------------------------------------------------ */
+QPushButton:pressed {{
+    border-style    : ;
+}}
+'''
+
+
+def build_scheme(accent: dict, base: dict) -> dict:
+    return {**base, **accent}
+
+def apply_style(widget: QWidget, scheme: dict) -> None:
+    widget.setStyleSheet(STYLE_TEMPLATE.format(**scheme))
+
+# ──────────────────────────────────────────────────────────────
+#  Helper widgets
+# ──────────────────────────────────────────────────────────────
+class EditableCanvas(QGraphicsView):
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        scene = QGraphicsScene(self)
+        scene.addRect(60, 60, 200, 120)
+        self.setScene(scene)
+        self.setRenderHints(self.renderHints() | QPainter.Antialiasing)
+
+class EditorTabs(QTabWidget):
+    def __init__(self) -> None:
+        super().__init__()
+        self.setMovable(True)
+        self.setTabsClosable(True)
+        self.tabCloseRequested.connect(self.removeTab)
+        self.addTab(QTextEdit("# main.py\n"), "main.py")
+        self.addTab(QTextEdit("# notes.md\n"), "notes.md")
+
+
+class AIWidget(QWidget):
+    def __init__(self, accent: dict, base: dict) -> None:
+        super().__init__()
+
+        # -------------------- Hauptbereich ----------------------------
+        self.out = QTextEdit()
+        self.inp = QTextEdit(placeholderText="Message in a bottle …")
+
+        splitter = QSplitter(Qt.Vertical)
+        splitter.addWidget(self.out)
+        splitter.addWidget(self.inp)
+        splitter.setSizes([400, 120])
+
+        # -------------------- Footer ----------------------------------
+        footer = QWidget(self)
+        footer.setAttribute(Qt.WA_StyledBackground, True)
+        footer.setStyleSheet(f"background:{build_scheme(accent, base)['col7']};")
+
+        f_lay = QHBoxLayout(footer)
+        f_lay.setContentsMargins(4, 2, 4, 2)
+        
+        # ---- 1. Image-Button (links) --------------------------------
+        self.img_btn = QPushButton()
+        self.img_btn.setToolTip("Image create")
+        self.img_btn.setIcon(QIcon("/home/benjamin/Vs_Code_Projects/AI_Assistant/image_24dp_666666_FILL0_wght600_GRAD0_opsz40.png"))
+        self.img_btn.setIconSize(QSize(24, 24))
+        #self.img_btn.setFlat(False)                           #  ←  kein Rahmen
+        self.img_btn.clicked.connect    #  ←  richtiger Slot
+        f_lay.addWidget(self.img_btn, 0, Qt.AlignLeft)
+
+        # ---- 1. Image-Button (links) --------------------------------
+        self.img_btn = QPushButton()
+        self.img_btn.setToolTip("Image analysis")
+        self.img_btn.setIcon(QIcon("AI_Assistant/symbols/add_photo_alternate_25dp_666666_FILL0_wght600_GRAD0_opsz48 (1).png"))
+        self.img_btn.setIconSize(QSize(24, 24))
+        #self.img_btn.setFlat(False)                           #  ←  kein Rahmen
+        self.img_btn.clicked.connect    #  ←  richtiger Slot
+        f_lay.addWidget(self.img_btn, 0, Qt.AlignLeft)
+
+        # ---- 2. Send-Button (rechts) -------------------------------
+        self.send_btn = QPushButton()
+        self.send_btn.setToolTip("Nachricht senden")
+        self.send_btn.setIcon(QIcon("/home/benjamin/Vs_Code_Projects/AI_Assistant/symbols/send_24dp_666666_FILL1_wght400_GRAD0_opsz24.svg"))
+        self.send_btn.setIconSize(QSize(22, 22))
+        self.send_btn.clicked.connect(self._send)
+        #self.send_btn.setFlat(False)                          #  ebenfalls ohne Rahmen
+         # ---- Spacer --------------------------------------------------
+                                 #  schiebt Send-Button nach rechts
+        f_lay.addStretch() 
+        f_lay.addStretch() 
+
+        f_lay.addWidget(self.send_btn)
+
+        
+        
+     
+
+        # ---- Spacer --------------------------------------------------
+                                 #  schiebt Send-Button nach rechts
+
+     
+        # -------------------- Hauptlayout ----------------------------
+        main_lay = QVBoxLayout(self)
+        main_lay.addWidget(splitter)
+        main_lay.addWidget(footer)
+
+    @Slot()
+    def _send(self) -> None:
+               """Send the user prompt to ChatCom and show the response."""
+               # --- Konfiguration --------------------------------------------------
+               api_key:  str = ""  # set via OPENAI_API_KEY / local .env (ignored)
+               model:    str = "gpt-4.1-2025-04-14"
+               # --- Eingabe auslesen ----------------------------------------------
+               input_text: str = self.inp.toPlainText().strip()
+
+               if not input_text:
+                   return  # nichts zu senden
+               # --- Benutzerbeitrag anzeigen --------------------------------------
+
+               self.out.insertHtml('<b style="font-size:14pt;">You:</b><br>')
+               self.out.insertPlainText(f'\n{input_text}\n')
+               # Eingabefeld leeren
+               self.inp.clear()
+
+
+               # --- Anfrage an das Backend ----------------------------------------
+               try:
+                   _chatcom      = ChatCom(api_key=api_key, model=model, input_text=input_text)
+                   response: str = _chatcom.get_response()
+               except Exception as exc:               # robuste Fehlerausgabe
+                   response = f"[ERROR] {exc}"
+                # --- Antwort anzeigen ----------------------------------------------        
+
+               self.out.insertHtml('<br> <b style="font-size:14pt;">AI:</b><br>')
+               self.out.insertPlainText(f'\n{response}')
+                # Automatisch ganz nach unten scrollensistant_text
+               self.out.verticalScrollBar().setValue(self.out.verticalScrollBar().maximum())
+# ──────────────────────────────────────────────────────────────
+#  Main window
+# ──────────────────────────────────────────────────────────────
+class MainAIEditor(QMainWindow):
+    ORG_NAME: Final[str] = "ai.bentu applications"
+    APP_NAME: Final[str] = "AI-Editor"
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.setWindowTitle("AI Editor – Synergetic")
+        self.resize(1280, 800)
+
+        self.accent = SCHEME_BLUE
+        self.base   = SCHEME_DARK
+        
+
+        self._create_central_splitters()
+        self._create_dock_widgets()
+        self._create_tool_bars()
+        self._create_menu_bar()
+        self._create_status_bar()
+        self._wire_visibility_actions()
+
+        apply_style(self, build_scheme(self.accent, self.base))
+
+    # ------------------------------------------------ central area
+    def _create_central_splitters(self) -> None:
+        main = QSplitter(Qt.Horizontal, self)
+        left = QSplitter(Qt.Vertical, main)
+
+        self.editor_tabs = EditorTabs()
+        self.canvas      = EditableCanvas()
+
+        left.addWidget(self.editor_tabs)
+        left.addWidget(QTextEdit("Console / Output"))
+        left.setSizes([400, 200])
+
+        main.addWidget(self.canvas)
+        main.setSizes([800, 400])
+        self.setCentralWidget(main)
+
+    # ------------------------------------------------ docks
+    def _create_dock_widgets(self) -> None:
+        self.explorer_dock = QDockWidget("Files", self)
+        self.explorer_dock.setWidget(QTextEdit("Outline …"))
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.explorer_dock)
+
+        self.chat_dock = QDockWidget("AI Chat", self)
+        self.chat_dock.setAllowedAreas(Qt.LeftDockWidgetArea | Qt.RightDockWidgetArea)
+        self.chat_dock.setWidget(AIWidget(SCHEME_BLUE, SCHEME_DARK))
+        self.addDockWidget(Qt.RightDockWidgetArea, self.chat_dock)
+    # ------------------------------------------------ toolbars
+    def _create_tool_bars(self) -> None:
+        style = self.style()
+
+        # --- Top toolbar
+        self.tb_top = QToolBar("Main", self)
+        self.addToolBar(Qt.TopToolBarArea, self.tb_top)
+
+        self.act_new   = QAction(style.standardIcon(QStyle.SP_FileIcon), "", self,
+                                 triggered=self._new_tab)
+        self.act_close = QAction(style.standardIcon(QStyle.SP_DialogCloseButton), "", self,
+                                 triggered=self._close_tab)
+        self.act_toggle_accent = QAction(style.standardIcon(QStyle.SP_BrowserReload), "", self,
+                                         triggered=self._toggle_accent)
+
+        self.act_toggle_explorer = QAction(
+            style.standardIcon(QStyle.SP_DirOpenIcon), "", self,
+            checkable=True, checked=True
+        )
+        self.act_toggle_chat = QAction(
+            style.standardIcon(QStyle.SP_ToolBarHorizontalExtensionButton), "", self,
+            checkable=True, checked=True
+        )
+
+        # visibility toggle icons
+        icon_bar = style.standardIcon(QStyle.SP_TitleBarShadeButton)
+        self.act_toggle_topbar  = QAction(icon_bar, "", self, checkable=True, checked=True)
+        self.act_toggle_sidebar = QAction(icon_bar, "", self, checkable=True, checked=True)
+        self.act_toggle_rightbar  = QAction(icon_bar, "", self, checkable=True, checked=True)
+
+        s=self.tb_top.addSeparator
+        
+        self.tb_top.addActions([s(),s(),s(),
+            self.act_new,s(),s(),s(), self.act_close,s(),s(), self.act_toggle_accent,s(),s(),s(),
+            self.act_toggle_explorer,s(),s(),s(),s(),self.act_toggle_sidebar,self.act_toggle_rightbar,s(),s(),s(),s(),self.act_toggle_chat
+        ])
+        
+    
+        # --- Side toolbar left 
+        self.tb_side = QToolBar("ltb", self)
+        self.tb_side.setOrientation(Qt.Vertical)
+        self.addToolBar(Qt.LeftToolBarArea, self.tb_side)
+
+        self.act_open_file = QAction(style.standardIcon(QStyle.SP_DialogOpenButton), "", self,
+                                     triggered=self._open_file)
+        self.act_about     = QAction(style.standardIcon(QStyle.SP_MessageBoxInformation), "", self,
+                                     triggered=self._about_box)        
+        
+        self.tb_side.addActions([s(),s(),s(),self.act_open_file,s(),s(),s(), self.act_about,s(),s(),s(), self.act_toggle_topbar])
+
+       
+        # --- Side toolbar right
+        self.tb_right = QToolBar("rtb", self)
+        self.tb_right.setOrientation(Qt.Vertical)
+        self.addToolBar(Qt.RightToolBarArea, self.tb_right)
+
+        self.act_open_file = QAction(style.standardIcon(QStyle.SP_DialogOpenButton), "", self,
+                                     triggered=self._open_file)
+        self.act_about     = QAction(style.standardIcon(QStyle.SP_DialogOpenButton), "", self,
+                                     triggered=self._about_box)
+
+        self.tb_right.addActions([s(),s(),s(),self.act_open_file,s(),s(),s(), self.act_toggle_topbar,self.act_toggle_rightbar])
+
+        # connect toggles
+        self.act_toggle_topbar.toggled.connect(self.tb_top.setVisible)
+        self.act_toggle_sidebar.toggled.connect(self.tb_side.setVisible)
+        self.act_toggle_rightbar.toggled.connect(self.tb_right.setVisible)
+       
+        self.act_toggle_explorer.toggled.connect(self.explorer_dock.setVisible)
+
+        # connect toggles
+
+        self.act_toggle_chat.toggled.connect(self.chat_dock.setVisible)
+
+    # ------------------------------------------------ menu
+    def _create_menu_bar(self) -> None:
+        menu_bar = QMenuBar(self)
+        self.setMenuBar(menu_bar)
+
+        view_menu = menu_bar.addMenu("View")
+        self.act_greyscale = QAction("Greyscale", self, checkable=True)
+        self.act_greyscale.toggled.connect(self._toggle_greyscale)
+        view_menu.addAction(self.act_greyscale)
+
+    # ------------------------------------------------ status bar
+    def _create_status_bar(self) -> None:
+        status = QStatusBar(self)
+        status.showMessage("Ready")
+        self.setStatusBar(status)
+
+    # ------------------------------------------------ helpers
+    def _wire_visibility_actions(self) -> None:
+        self.explorer_dock.visibilityChanged.connect(self.act_toggle_explorer.setChecked)
+        self.chat_dock.visibilityChanged.connect(self.act_toggle_chat.setChecked)
+
+    # ------------------------------------------------ colour / style
+    @Slot()
+    def _toggle_accent(self) -> None:
+      self.accent = SCHEME_GREEN if self.accent is SCHEME_BLUE else SCHEME_BLUE
+      apply_style(self, build_scheme(self.accent, self.base))
+    #  build_scheme(self,self.accent, self.base)   #  <─ neu
+
+    @Slot()
+    def _toggle_greyscale(self, checked: bool) -> None:
+        self.base = SCHEME_GREY if checked else SCHEME_DARK
+        apply_style(self, build_scheme(self.accent, self.base))
+
+    # ------------------------------------------------ file / tab
+    @Slot()
+    def _new_tab(self) -> None:
+        idx = self.editor_tabs.addTab(
+            QTextEdit("# new file …"), f"untitled_{self.editor_tabs.count()+1}.py"
+        )
+        self.editor_tabs.setCurrentIndex(idx)
+
+    @Slot()
+    def _close_tab(self) -> None:
+        idx = self.editor_tabs.currentIndex()
+        if idx >= 0:
+            self.editor_tabs.removeTab(idx)
+
+    @Slot()
+    def _open_file(self) -> None:
+        fname, _ = QFileDialog.getOpenFileName(
+            self, "Open source file", str(Path.home()), "All files (*)"
+        )
+        if not fname:
+            return
+        try:
+            with open(fname, "r", encoding="utf-8") as fh:
+                content = fh.read()
+        except OSError as exc:
+            QMessageBox.critical(self, "Error", f"Cannot read file:\n{exc}")
+            return
+        editor = QTextEdit(content)
+        idx = self.editor_tabs.addTab(editor, Path(fname).name)
+        self.editor_tabs.setCurrentIndex(idx)
+
+    @Slot()
+    def _about_box(self) -> None:
+        QMessageBox.information(
+            self,
+            "About",
+            "AI Python3 Multi-window Editor\n"
+            "Refactored version – © ai.bentu\n"
+            "Powered by Qt",
+        )
+
+# ──────────────────────────────────────────────────────────────
+#  main
+# ──────────────────────────────────────────────────────────────
+def main() -> None:
+    app = QApplication(sys.argv)
+    win = MainAIEditor()
+    win.show()
+    sys.exit(app.exec())
+
+if __name__ == "__main__":
+    main

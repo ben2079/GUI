@@ -38,9 +38,11 @@ AI_IDE_v1756/_Comments/
 **/sessions.db
 **/sessions.db-*
 
-# AppData (runtime/private). Keep only tracked README files.
+# AppData (runtime/private). Keep stable templates + README.
 **/AppData/**
 !**/AppData/README.md
+!**/AppData/templates/
+!**/AppData/templates/**
 
 # App runtime data (private / machine-specific)
 dispatcher_doc_db.json
@@ -67,6 +69,12 @@ dispatcher_doc_db.json
 
 # Local AppData inside package (often contains personal artifacts)
 **/ai_ide/AppData/
+
+# Local vector-store artifacts (private / machine-specific)
+**/ai_ide/VSM_*_Data/
+
+# Personal docs kept out of the public reference repo
+**/ai_ide/Dokumente/
 
 # Local interactive dumps
 **/ai_ide/USER INPUT*

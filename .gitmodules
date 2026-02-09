@@ -1,0 +1,3 @@
+[submodule "AI_IDE_v1756/AI_IDE_v1756/alpha_vantage_mcp"]
+	path = AI_IDE_v1756/AI_IDE_v1756/alpha_vantage_mcp
+	url = https://github.com/alphavantage/alpha_vantage_mcp.git

@@ -18,6 +18,19 @@ Run the app entrypoint:
 python -m AI_IDE_v1756.AI_IDE_v1756.ai_ide
 ```
 
+## Why it may look "incomplete"
+
+This repo is cleaned for **public reference**: local/private runtime artifacts (PDFs, vector stores, histories, caches) are intentionally not tracked.
+
+To bootstrap a fresh clone with an empty-but-valid local state, run:
+
+```bash
+python scripts/bootstrap_local_state.py
+```
+
+Then set your `OPENAI_API_KEY` in `AI_IDE_v1756/AI_IDE_v1756/.env` (this file stays ignored).
+
+
 ## Repo hygiene (public reference)
 
 This repo uses an `AppData/` folder for local runtime state (history, vector stores, caches, generated files). These are intentionally **ignored** for a clean, linkable reference repo.

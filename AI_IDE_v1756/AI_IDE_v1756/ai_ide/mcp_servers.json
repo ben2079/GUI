@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "local-stdio": {
+      "type": "stdio",
+      "command": "python",
+      "args": [
+        "./ai_ide/mcp_server.py"
+      ]
+    }
+  }
+}
