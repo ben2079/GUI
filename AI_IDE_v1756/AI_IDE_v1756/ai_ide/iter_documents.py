@@ -1,15 +1,19 @@
 from __future__ import annotations
 from hashlib import sha1
 from pathlib import Path
-from typing import Iterable, Sequence
-from get_path import GetPath
+from typing import Iterable, Sequence, TYPE_CHECKING
 
-from langchain_community.document_loaders import (
-    PyPDFLoader,
-    TextLoader,
-    PythonLoader,
-)
-from langchain_core.documents import Document
+try:
+    from .get_path import GetPath
+except ImportError as e:  # allow running directly from the repository root
+    msg = str(e)
+    if "no known parent package" in msg or "attempted relative import" in msg:
+        from get_path import GetPath
+    else:
+        raise
+
+if TYPE_CHECKING:
+    from langchain_core.documents import Document
 
 __all__ = ["iter_documents"]
 
@@ -55,7 +59,9 @@ def _load_text(path: Path) -> list[Document]:
     Returns only non-empty pages and enriches metadata (titel, id, applied).
     """
     try:
-        loader =TextLoader(str(path))
+        from langchain_community.document_loaders import TextLoader
+
+        loader = TextLoader(str(path))
         docs = loader.load()
     except Exception:
         return []
@@ -70,6 +76,8 @@ def _load_pdf(path: Path) -> list[Document]:
     Uses PythonLoader for .py, TextLoader otherwise.
     """
     try:
+        from langchain_community.document_loaders import PyPDFLoader
+
         loader = PyPDFLoader(str(path))
         docs = loader.load()
     except Exception:

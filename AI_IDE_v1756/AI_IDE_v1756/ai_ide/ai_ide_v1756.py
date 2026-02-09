@@ -1,7 +1,6 @@
 from __future__ import annotations    ## ai_ide_v1756.py
 
-#  Author: benjamin r.
-#  Email: bendr2024@gmail.com
+# Maintainer contact: see repository README.
 
 # – start of instructs –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– –
 """ ERROR: ChatHistory hat kein Objekt-Attribut _project_vector

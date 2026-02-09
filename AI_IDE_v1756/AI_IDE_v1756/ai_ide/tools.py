@@ -1,7 +1,11 @@
 try:
     from .get_path import GetPath  # type: ignore
-except Exception:
-    from get_path import GetPath  # type: ignore
+except ImportError as e:
+    msg = str(e)
+    if "no known parent package" in msg or "attempted relative import" in msg:
+        from get_path import GetPath  # type: ignore
+    else:
+        raise
 import os
 import hashlib
 from datetime import datetime
@@ -23,7 +27,7 @@ except ImportError as e:  # allow running directly from the repository root
     else:
         raise
 # Extractor import (local module)
-_DEFAULT_SAVE_DIR = os.path.expanduser("/home/ben/Applications/Cover_letters")
+_DEFAULT_SAVE_DIR = os.path.join(os.path.expanduser("~"), "Cover_letters")
 
 
 def _sha256_file(path: str, chunk_size: int = 1024 * 1024) -> str:
@@ -608,8 +612,12 @@ def _vectordb_worker(
         # Local imports inside the child keep the main GUI process safer.
         try:
             from .get_path import GetPath  # type: ignore
-        except Exception:
-            from get_path import GetPath  # type: ignore
+        except ImportError as e:
+            msg = str(e)
+            if "no known parent package" in msg or "attempted relative import" in msg:
+                from get_path import GetPath  # type: ignore
+            else:
+                raise
 
         try:
             from .vstores import VectorStore  # type: ignore
@@ -712,8 +720,12 @@ def _vdb_admin_worker(
         # Local imports inside the child keep the main GUI process safer.
         try:
             from .get_path import GetPath  # type: ignore
-        except Exception:
-            from get_path import GetPath  # type: ignore
+        except ImportError as e:
+            msg = str(e)
+            if "no known parent package" in msg or "attempted relative import" in msg:
+                from get_path import GetPath  # type: ignore
+            else:
+                raise
 
         try:
             from .vstores import VectorStore  # type: ignore

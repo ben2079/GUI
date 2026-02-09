@@ -95,12 +95,12 @@ SAMPLE_JOB_POSTING = {
 SAMPLE_PROFILE = {
     "profile_id": "profile:44e8fce720b6ef2f385478d7f1123027caa7a148abc37af870c7522f0ccf6040",
     "personal_info": {
-        "full_name": "Benjamin Röder",
-        "date_of_birth": "1989-01-06",
+        "full_name": "Example Candidate",
+        "date_of_birth": "1990-01-01",
         "citizenship": "DE",
-        "address": "Waldwiesenstraße 41, 66538 Neunkirchen, Germany",
-        "phone": "+49 1590 614 789",
-        "email": "bendr2024@gmail.com",
+        "address": "Example Street 1, 12345 Example City, Germany",
+        "phone": "(redacted)",
+        "email": "example@example.com",
         "linkedin": None,
         "portfolio": None
     },

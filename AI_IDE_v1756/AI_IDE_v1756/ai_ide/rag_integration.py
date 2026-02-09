@@ -24,7 +24,14 @@ import logging
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 
-from rag_core import RAGSystem, RetrievalResult, create_rag_system
+try:
+    from .rag_core import RAGSystem, RetrievalResult, create_rag_system
+except ImportError as e:  # allow running directly from the repository root
+    msg = str(e)
+    if "no known parent package" in msg or "attempted relative import" in msg:
+        from rag_core import RAGSystem, RetrievalResult, create_rag_system
+    else:
+        raise
 
 logger = logging.getLogger(__name__)
 

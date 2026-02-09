@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-#  Author: benjamin r.
-#  Email: bendr2024@gmail.com
+# Maintainer contact: see repository README.
 
 from pathlib import Path
 from importlib.metadata import metadata
@@ -16,12 +15,20 @@ from pyexpat import model
 
 try:
     from .chat_completion import ChatComE, ChatCompletion
-except Exception:
-    from AI_IDE_v1756.AI_IDE_v1756.ai_ide.chat_completion import ChatComE, ChatCompletion
+except ImportError as e:
+    msg = str(e)
+    if "no known parent package" in msg or "attempted relative import" in msg:
+        from AI_IDE_v1756.AI_IDE_v1756.ai_ide.chat_completion import ChatComE, ChatCompletion
+    else:
+        raise
 try:
     from .tools import UNIFIED_TOOLS, TOOL_GROUPS, vectordb, memorydb  # type: ignore
-except Exception:
-    from tools import UNIFIED_TOOLS, TOOL_GROUPS, vectordb, memorydb  # type: ignore
+except ImportError as e:
+    msg = str(e)
+    if "no known parent package" in msg or "attempted relative import" in msg:
+        from tools import UNIFIED_TOOLS, TOOL_GROUPS, vectordb, memorydb  # type: ignore
+    else:
+        raise
 if __name__ == '__main__':  
     _script_dir = Path(__file__).parent
     _parent_dir = _script_dir.parent
@@ -32,8 +39,12 @@ if __name__ == '__main__':
         sys.path.insert(0, str(_script_dir))
 try:
     from .get_path import GetPath  # type: ignore
-except Exception:
-    from get_path import GetPath  # type: ignore
+except ImportError as e:
+    msg = str(e)
+    if "no known parent package" in msg or "attempted relative import" in msg:
+        from get_path import GetPath  # type: ignore
+    else:
+        raise
 
 #try:
     # ChatComE is the agent-capable chat client that accepts (_messages, tools)
@@ -89,11 +100,6 @@ def _latest_user_message(default: str = "") -> str:
 #atexit.register(_cleanup_on_exit)
 from dataclasses import dataclass, field
 from typing import Callable
-from get_path import GetPath
-import os
-import hashlib
-from datetime import datetime
-import json
 
 
 @dataclass

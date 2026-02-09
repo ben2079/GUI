@@ -4,7 +4,7 @@ from importlib import metadata
 from sqlalchemy import literal
 
 #  August 2025
-#  Author: Benjamin R. - Email: bendr2024@gmail.com
+# Maintainer contact: see repository README.
 #  Module: vstores.py
 # ───────────────────────────── Imports ──────────────────────────────
 
@@ -41,8 +41,12 @@ except Exception:
 
 try:
     from .get_path import GetPath  # type: ignore
-except Exception:
-    from get_path import GetPath  # type: ignore
+except ImportError as e:
+    msg = str(e)
+    if "no known parent package" in msg or "attempted relative import" in msg:
+        from get_path import GetPath  # type: ignore
+    else:
+        raise
 # ───────────────────────────── Modul-Variablen ─────────────────────────────
 __all__ = ["VectorStore"]  # stellt sicher, dass nur das Public-API exportiert wird
 # ─────────────────────── Konfigurations-Konstanten ──────────────────────

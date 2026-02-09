@@ -1,5 +1,7 @@
-#  Author: benjamin r.
-#  Email: bendr2024@gmail.com
+"""Path utilities.
+
+Maintainer contact: see repository README.
+"""
 
 import sys, os
 

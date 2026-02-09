@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-#  Author: benjamin r.
-#  Email: bendr2024@gmail.com
+# Maintainer contact: see repository README.
 
 """Agent registry.
 

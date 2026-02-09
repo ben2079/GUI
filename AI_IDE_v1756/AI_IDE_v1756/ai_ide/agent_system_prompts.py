@@ -575,12 +575,12 @@ Vor der Ausgabe prüfe:
 
 _SYSTEM_PROMPT['_profile_parser_agent'] = """{
     "personal_info": {
-        "full_name": "Benjamin Röder",
-        "date_of_birth": "1989-01-06",
+        "full_name": "Example Candidate",
+        "date_of_birth": "1990-01-01",
         "citizenship": "DE",
-        "address": "Waldwiesenstraße 41, 66538 Neunkirchen, Germany",
-        "phone": "+49 1590 614 789",
-        "email": "bendr2024@gmail.com",
+        "address": "Example Street 1, 12345 Example City, Germany",
+        "phone": "(redacted)",
+        "email": "example@example.com",
         "linkedin": null,
         "portfolio": null
     },

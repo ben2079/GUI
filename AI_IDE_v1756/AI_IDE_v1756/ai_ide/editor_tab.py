@@ -1,29 +1,4 @@
-#  Author: benjamin r.
-#  Email: bendr2024@gmail.com
-
-# – start of instructs –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– –
-"""
-/ai_ide_v1756.py", line 1929, in <module>
-    main()
-    ~~~~^^
-  File "/home/ben/rescue/Videos/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/ai_ide_v1756.py", line 1920, in main
-    win = MainAIEditor()
-  File "/home/ben/rescue/Videos/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/ai_ide_v1756.py", line 1317, in __init__
-    self._create_central_splitters()
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/home/ben/rescue/Videos/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/ai_ide_v1756.py", line 1378, in _create_central_splitters
-    self._add_initial_tab_dock()     # oben
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/home/ben/rescue/Videos/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/ai_ide_v1756.py", line 1420, in _add_initial_tab_dock
-    self._clone_tab_dock(set_current = True)
-    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
-  File "/home/ben/rescue/Videos/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/ai_ide_v1756.py", line 1661, in _clone_tab_dock
-    tabs = EditorTabs()
-  File "/home/ben/rescue/Videos/Vs_Code_Projects/Projects/GUI/AI_IDE_v1756/ai_ide_v1756.py", line 670, in __init__
-    super().__init__(parent)
-    ~~~~~~~~~~~~~~~~^^^^^^^^
-TypeError: object.__init__() takes exactly one argument (the instance to initialize)"""
-# – end of instrcus ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– –
+# Maintainer contact: see repository README.
 import sys
 from pathlib import Path
 

@@ -1,5 +1,5 @@
-from __future__ import annotations                                            #  Author: benjamin r.
-from pathlib import Path                                                      #  Email: bendr2024@gmail.com
+from __future__ import annotations
+from pathlib import Path
 from datetime import datetime
 from chatclasscompletion  import ChatComEditor
 from dotenv import load_dotenv

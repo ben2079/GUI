@@ -2,7 +2,7 @@ from __future__ import annotations
 
 # Maintainer contact: see repository README.
 
-from openai import APIConnectionError, APITimeoutError, OpenAI, RateLimitError, RateLimitError, responses
+from openai import APIConnectionError, APITimeoutError, OpenAI, RateLimitError, responses
 import base64
 import requests
 import subprocess
@@ -23,18 +23,30 @@ from types import SimpleNamespace
 
 try:
     from .counter import Counter  # type: ignore
-except Exception:
-    from counter import Counter  # type: ignore
+except ImportError as e:
+    msg = str(e)
+    if "no known parent package" in msg or "attempted relative import" in msg:
+        from counter import Counter  # type: ignore
+    else:
+        raise
 
 try:
     from .get_path import GetPath  # type: ignore
-except Exception:
-    from get_path import GetPath  # type: ignore
+except ImportError as e:
+    msg = str(e)
+    if "no known parent package" in msg or "attempted relative import" in msg:
+        from get_path import GetPath  # type: ignore
+    else:
+        raise
 
 try:
     from .vstores import VectorStore  # type: ignore
-except Exception:
-    from vstores import VectorStore  # type: ignore
+except ImportError as e:
+    msg = str(e)
+    if "no known parent package" in msg or "attempted relative import" in msg:
+        from vstores import VectorStore  # type: ignore
+    else:
+        raise
 
 
 # ---------------------------------------------------------------------------
@@ -116,7 +128,14 @@ class ChatCompletion():
             return __key
     
     # Single shared OpenAI client instance for this module.
-    _client: OpenAI = OpenAI(api_key=_read_api_key())
+    # Lazily initialized so imports work without OPENAI_API_KEY set.
+    _client: OpenAI | None = None
+
+    @classmethod
+    def _get_client(cls) -> OpenAI:
+        if cls._client is None:
+            cls._client = OpenAI(api_key=cls._read_api_key())
+        return cls._client
 
 
 class Caller(ChatCompletion):
@@ -1066,7 +1085,7 @@ class ImageDescription(ChatCompletion):
         ]
         }
         ]
-        self.img_response = self._client.chat.completions.create(
+        self.img_response = self._get_client().chat.completions.create(
             model = self.model, 
             messages = message
             ) 
@@ -1099,7 +1118,7 @@ class ChatDialogue(ChatCompletion):
 
     def get_response(self,input_text):
         self.response = (
-        self._client.chat.completions.create(
+        self._get_client().chat.completions.create(
         model = self.model,
         modalities = ["text","audio"],
         audio = {"voice":{self.voice},
@@ -1325,7 +1344,7 @@ class ChatCom(ChatCompletion,ChatHistory):
                 except Exception:
                     tools = None
            
-            response = self._client.chat.completions.create(
+            response = self._get_client().chat.completions.create(
                 model = model,
                 messages = _input,
                 tools = tools,
@@ -1474,7 +1493,7 @@ class ImageCreate(ChatCompletion,ChatHistory):
             _name_tool="image_generation"
         )
         if not self._previous_response_id:
-            response = self._client.responses.create(
+            response = self._get_client().responses.create(
                 model=_model,
                 input=_input_text,
                 
@@ -1488,7 +1507,7 @@ class ImageCreate(ChatCompletion,ChatHistory):
             )
             self._previous_response_id = response.id
         else:
-            response = self._client.responses.create(
+            response = self._get_client().responses.create(
                 previous_response_id = self._previous_response_id,
                 model=_model,
                 input=_input_text,
