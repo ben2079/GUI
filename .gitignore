@@ -84,6 +84,7 @@ VSM_3_Data/
 
 # Personal docs kept out of the public reference repo
 **/ai_ide/Dokumente/
+**/alde/Dokumente/
 
 # Local interactive dumps
 **/ai_ide/USER INPUT*
