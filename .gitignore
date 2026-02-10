@@ -73,8 +73,14 @@ dispatcher_doc_db.json
 # Local AppData inside package (often contains personal artifacts)
 **/ai_ide/AppData/
 
+# Pre-restore snapshots (private / machine-specific)
+AI_IDE_v1756/AI_IDE_v1756/AppData__pre_restore_*/
+
 # Local vector-store artifacts (private / machine-specific)
 **/ai_ide/VSM_*_Data/
+
+# Local data folder at repo root (private / machine-specific)
+VSM_3_Data/
 
 # Personal docs kept out of the public reference repo
 **/ai_ide/Dokumente/

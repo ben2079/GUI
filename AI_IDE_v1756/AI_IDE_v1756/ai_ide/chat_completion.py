@@ -605,7 +605,6 @@ class ChatHistory(VectorStore):
         try:
             target = getattr(cls, "_HISTORY_PATH", None) or cls._FINAL_PATH
             tmp = f"{target}.tmp"
-            print(f"temporery_file: {tmp}")
 
             def _sanitize(obj: Any) -> Any:
                 """Recursively coerce data into JSON-safe types."""

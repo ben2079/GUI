@@ -3,7 +3,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
-from datetime import datetime
+import textwrap
+from datetime import datetime, timezone
 from typing import Any
 
 from openai import OpenAI
@@ -28,6 +29,18 @@ else:
     _PDF_IMPORT_ERROR = None
 
 
+try:
+    from reportlab.lib.pagesizes import A4  # type: ignore
+    from reportlab.lib.units import mm  # type: ignore
+    from reportlab.pdfbase.pdfmetrics import stringWidth  # type: ignore
+    from reportlab.pdfgen import canvas  # type: ignore
+except Exception as exc:  # pragma: no cover
+    canvas = None  # type: ignore
+    _REPORTLAB_IMPORT_ERROR = exc
+else:
+    _REPORTLAB_IMPORT_ERROR = None
+
+
 def _load_json(path: str) -> Any:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
@@ -46,6 +59,82 @@ def _extract_pdf_text(pdf_path: str) -> str:
         if txt.strip():
             parts.append(txt)
     return "\n\n".join(parts)
+
+
+def _write_pdf(*, content: str, out_dir: str, doc_id: str) -> str:
+    """Write `content` as a simple, text-only PDF and return the file path."""
+    if canvas is None:
+        raise RuntimeError(f"reportlab unavailable: {_REPORTLAB_IMPORT_ERROR}")
+
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(out_dir, f"{doc_id}.pdf")
+
+    page_w, page_h = A4
+    margin = 18 * mm
+    x0 = margin
+    y = page_h - margin
+
+    font_name = "Helvetica"
+    font_size = 11
+    leading = 14
+    max_width = page_w - 2 * margin
+
+    c = canvas.Canvas(out_path, pagesize=A4)
+    c.setTitle(doc_id)
+    c.setFont(font_name, font_size)
+
+    def _new_page() -> None:
+        nonlocal y
+        c.showPage()
+        c.setFont(font_name, font_size)
+        y = page_h - margin
+
+    def _wrap_line(line: str) -> list[str]:
+        s = (line or "").rstrip("\n")
+        if not s.strip():
+            return [""]
+
+        words = s.split(" ")
+        out: list[str] = []
+        cur = ""
+
+        for w in words:
+            candidate = (cur + " " + w).strip() if cur else w
+            if stringWidth(candidate, font_name, font_size) <= max_width:
+                cur = candidate
+                continue
+
+            if cur:
+                out.append(cur)
+                cur = ""
+
+            # If a single word is too long, hard-wrap it.
+            if stringWidth(w, font_name, font_size) > max_width:
+                # Estimate characters per line by average character width.
+                avg = max(3.0, stringWidth("abcdefghijklmnopqrstuvwxyz", font_name, font_size) / 26.0)
+                est = max(10, int(max_width / avg))
+                for chunk in textwrap.wrap(w, width=est, break_long_words=True, break_on_hyphens=False):
+                    out.append(chunk)
+            else:
+                cur = w
+
+        if cur:
+            out.append(cur)
+        return out
+
+    for raw_line in (content or "").splitlines():
+        for line in _wrap_line(raw_line):
+            if y < margin + leading:
+                _new_page()
+            c.drawString(x0, y, line)
+            y -= leading
+
+    c.save()
+    return out_path
+
+
+def _utc_now_iso_z() -> str:
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 def _json_loads_loose(s: str) -> Any:
@@ -92,18 +181,22 @@ def batch_generate(
     max_files: int | None = None,
     max_text_chars: int = 20000,
     dry_run: bool = False,
+    write_pdf: bool = False,
 ) -> dict:
     scan_dir = os.path.abspath(os.path.expanduser(scan_dir))
     profile_path = os.path.abspath(os.path.expanduser(profile_path))
     dispatcher_db_path = os.path.abspath(os.path.expanduser(dispatcher_db_path))
     out_dir = os.path.abspath(os.path.expanduser(out_dir or os.path.join(scan_dir, "Cover_letters")))
     os.makedirs(out_dir, exist_ok=True)
+    out_dir_real = os.path.realpath(out_dir)
 
     profile = _load_json(profile_path)
 
     # Load OPENAI_API_KEY from local .env (if present).
     load_dotenv()
-    client = OpenAI()
+    client: OpenAI | None = None
+    if not dry_run:
+        client = OpenAI()
 
     # Build a profile_result wrapper that matches the cover letter agent's input contract.
     profile_id = None
@@ -124,7 +217,7 @@ def batch_generate(
         dispatcher_message_id="batch",
         recursive=True,
         max_files=max_files,
-        dry_run=False,
+        dry_run=dry_run,
     )
 
     classified = (scan_report.get("classified") or {}) if isinstance(scan_report, dict) else {}
@@ -147,6 +240,11 @@ def batch_generate(
             if not pdf_path or not isinstance(pdf_path, str):
                 raise ValueError("missing_pdf_path")
 
+            pdf_path = os.path.abspath(os.path.expanduser(pdf_path))
+            # Never treat our generated outputs as inputs.
+            if os.path.realpath(pdf_path).startswith(out_dir_real + os.sep):
+                continue
+
             base = os.path.basename(pdf_path)
             if base == "Muster_Anschreiben.pdf":
                 continue
@@ -168,15 +266,18 @@ def batch_generate(
                 else:
                     raise FileNotFoundError(pdf_path)
 
+            if dry_run:
+                results.append({"pdf": pdf_path, "sha": sha, "status": "dry_run"})
+                continue
+
             text = _extract_pdf_text(pdf_path)
             if max_text_chars and isinstance(text, str) and len(text) > int(max_text_chars):
                 text = text[: int(max_text_chars)]
             job_payload = _job_payload_from_scan_item(item, thread_id="batch", message_id="PENDING")
             job_payload["extracted_text"] = text
 
-            if dry_run:
-                results.append({"pdf": pdf_path, "sha": sha, "status": "dry_run"})
-                continue
+            if client is None:
+                raise RuntimeError("OpenAI client unavailable (dry_run=True)")
 
             # 1) Parse job posting into structured JSON.
             parser_messages = [
@@ -213,8 +314,14 @@ def batch_generate(
             if not full_text or not isinstance(full_text, str):
                 raise ValueError("cover_letter_missing_full_text")
 
-            saved = write_document(content=full_text, path=out_dir, doc_id=os.path.splitext(base)[0])
-            saved_path = str(saved).split(": ", 1)[-1].strip()
+            doc_id = os.path.splitext(base)[0]
+
+            saved = write_document(content=full_text, path=out_dir, doc_id=doc_id)
+            saved_text_path = str(saved).split(": ", 1)[-1].strip()
+
+            saved_pdf_path: str | None = None
+            if write_pdf:
+                saved_pdf_path = _write_pdf(content=full_text, out_dir=out_dir, doc_id=doc_id)
 
             # Update DB record
             if isinstance(docs, dict):
@@ -222,24 +329,33 @@ def batch_generate(
                 rec = dict(rec)
                 rec["processed"] = True
                 rec["processing_state"] = "processed"
-                rec["processed_at"] = datetime.utcnow().isoformat() + "Z"
-                rec["cover_letter_path"] = saved_path
+                rec["processed_at"] = _utc_now_iso_z()
+                rec["cover_letter_text_path"] = saved_text_path
+                rec["cover_letter_pdf_path"] = saved_pdf_path
+                rec["cover_letter_path"] = saved_pdf_path or saved_text_path
                 rec["last_error"] = None
                 docs[sha] = rec
                 _save_dispatcher_db(dispatcher_db_path, db)
 
-            results.append({"pdf": pdf_path, "sha": sha, "status": "ok", "cover_letter": saved_path})
+            results.append({
+                "pdf": pdf_path,
+                "sha": sha,
+                "status": "ok",
+                "cover_letter_text": saved_text_path,
+                "cover_letter_pdf": saved_pdf_path,
+                "cover_letter": saved_pdf_path or saved_text_path,
+            })
 
         except Exception as exc:
             sha = (item or {}).get("content_sha256")
-            if sha and isinstance(docs, dict):
+            if (not dry_run) and sha and isinstance(docs, dict):
                 rec = docs.get(sha) if isinstance(docs.get(sha), dict) else {}
                 rec = dict(rec)
                 rec["processed"] = False
                 rec["processing_state"] = "failed"
                 rec["failed_reason"] = f"{type(exc).__name__}: {exc}"
                 rec["last_error"] = f"{type(exc).__name__}: {exc}"
-                rec["last_error_at"] = datetime.utcnow().isoformat() + "Z"
+                rec["last_error_at"] = _utc_now_iso_z()
                 docs[sha] = rec
                 _save_dispatcher_db(dispatcher_db_path, db)
             results.append({"pdf": item.get("path"), "sha": sha, "status": "error", "error": f"{type(exc).__name__}: {exc}"})
@@ -264,6 +380,7 @@ def main() -> None:
     ap.add_argument("--max-files", type=int, default=None)
     ap.add_argument("--max-text-chars", type=int, default=20000)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--write-pdf", action="store_true", help="Also write each cover letter as a PDF (requires reportlab)")
     args = ap.parse_args()
 
     report = batch_generate(
@@ -275,6 +392,7 @@ def main() -> None:
         max_files=args.max_files,
         max_text_chars=args.max_text_chars,
         dry_run=args.dry_run,
+        write_pdf=args.write_pdf,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
 

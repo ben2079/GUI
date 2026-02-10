@@ -257,12 +257,18 @@ def _maybe_flush_history(chat_obj=None) -> None:
 
     Controlled by env var:
       - AI_IDE_DISABLE_HISTORY_FLUSH=1  (skip history persistence)
+            - AI_IDE_ENABLE_HISTORY_FLUSH_ON_QUIT=1  (enable flush hooks on quit/close)
     """
     global _HISTORY_FLUSHED_ONCE
     if _HISTORY_FLUSHED_ONCE:
         return
     if _env_truthy("AI_IDE_DISABLE_HISTORY_FLUSH", "0"):
         return
+        # PySide6 can segfault when flushing during Qt shutdown hooks on some
+        # environments (observed as EXIT:139). Keep shutdown flush disabled unless
+        # explicitly enabled.
+        if not _env_truthy("AI_IDE_ENABLE_HISTORY_FLUSH_ON_QUIT", "0"):
+                return
 
     _HISTORY_FLUSHED_ONCE = True
     try:
@@ -1526,11 +1532,24 @@ class AIWidget(QWidget):
         super().__init__(parent,)
 
         self.api_key: str = self._read_api_key()
+        self._api_key_missing: bool = not bool(self.api_key)
         self._model:   str = "o3-2025-04-16"                 # <<< zentrales Modell
         self._dropped_files: List[str] = []
         self.scheme = _build_scheme(accent, base)                # Farbschema mergen
         self._build_ui()
         self._wire()
+
+        if self._api_key_missing:
+            try:
+                for btn in (getattr(self, "btn_send", None), getattr(self, "btn_img_analyse", None), getattr(self, "btn_img_create", None)):
+                    if btn is not None:
+                        btn.setEnabled(False)
+            except Exception:
+                pass
+            try:
+                self._append("System", "OPENAI_API_KEY not found. Set it in your environment or a .env file to enable chat.")
+            except Exception:
+                pass
         
         # Hover-Events aktivieren
         self.setAttribute(QtCore.Qt.WA_Hover, True)
@@ -1557,10 +1576,7 @@ class AIWidget(QWidget):
                 load_dotenv(f, override=False)
                 
         load_dotenv()
-        key = os.getenv("OPENAI_API_KEY")
-        if not key:
-            raise RuntimeError("OPENAI_API_KEY not found")
-                       
+        key = (os.getenv("OPENAI_API_KEY") or "").strip()
         return key
     
     def _build_ui(self) -> None:
@@ -1629,6 +1645,12 @@ class AIWidget(QWidget):
     # ---------------------------------------------------------------------------
     @Slot()
     def _send(self) -> None:
+        if getattr(self, "_api_key_missing", False):
+            try:
+                self._append("System", "Chat is disabled because OPENAI_API_KEY is not set.")
+            except Exception:
+                pass
+            return
         prompt = self.prompt_edit.toPlainText().strip()
         if not prompt:
             return
@@ -1654,6 +1676,12 @@ class AIWidget(QWidget):
     # ---------------------------------------------------------------------------
     @Slot()
     def _send_img(self) -> None:
+        if getattr(self, "_api_key_missing", False):
+            try:
+                self._append("System", "Image analysis is disabled because OPENAI_API_KEY is not set.")
+            except Exception:
+                pass
+            return
         prompt = self.prompt_edit.toPlainText().strip()
         if not (prompt and self._dropped_files):
             QMessageBox.warning(self, "Info",
@@ -1688,6 +1716,12 @@ class AIWidget(QWidget):
     # ---------------------------------------------------------------------------
     @Slot()
     def _create_img(self) -> None:
+        if getattr(self, "_api_key_missing", False):
+            try:
+                self._append("System", "Image creation is disabled because OPENAI_API_KEY is not set.")
+            except Exception:
+                pass
+            return
         prompt = self.prompt_edit.toPlainText().strip()
         if not prompt:
             QMessageBox.warning(self, "Info", "Bitte Prompt eingeben.")
@@ -3353,11 +3387,14 @@ def main() -> None:
 
     # Persist chat history on clean shutdown even if MainAIEditor.closeEvent
     # is not reached (e.g. alternative quit paths).
-    try:
-        # Wrap in a lambda so PySide doesn't have to bind a classmethod directly.
-        app.aboutToQuit.connect(lambda: _maybe_flush_history())
-    except Exception:
-        pass
+    # History flush during Qt shutdown can segfault in some environments.
+    # Keep it opt-in via AI_IDE_ENABLE_HISTORY_FLUSH_ON_QUIT=1.
+    if _env_truthy("AI_IDE_ENABLE_HISTORY_FLUSH_ON_QUIT", "0"):
+        try:
+            # Wrap in a lambda so PySide doesn't have to bind a classmethod directly.
+            app.aboutToQuit.connect(lambda: _maybe_flush_history())
+        except Exception:
+            pass
 
     # Remove system/Qt drop shadows on context menus and ensure true rounded corners
     # (otherwise a dark rectangle can remain visible behind the radius).

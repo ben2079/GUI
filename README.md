@@ -1,4 +1,6 @@
-# GUI workspace
+# ALDE
+
+**ALDE** = **A**I- and **L**LM-**D**evelopment **E**nvironment
 
 This repository contains the **AI IDE v1756** project (Python + PySide6/Qt) with a modular backend (RAG + agent workflows) and a local packaging setup.
 

@@ -553,6 +553,11 @@ class JsonTreeWidget(QTreeWidget):
         self.setHeaderHidden(True)
         self.setUniformRowHeights(True)
         self.setAnimated(True)
+
+        # Guards / caches for persistence.
+        self._initializing = True
+        self._item_last_text: dict[QTreeWidgetItem, str] = {}
+        self._last_saved_hash: str | None = None
         
         # Store data for each section separately
         self._data: dict[str, dict[str, Any]] = {}
@@ -599,9 +604,9 @@ class JsonTreeWidget(QTreeWidget):
         self._section_header_font_size = 10
         self._section_item_font_size_small = 10
         self._apply_stylesheet()
-    
-        # Connect signal for handling item edits
-        self.itemChanged.connect(self._on_item_changed)
+
+        # NOTE: itemChanged is connected after initial population to avoid
+        # triggering persistence while icons/fonts are being applied.
         
         # Enable context menu
         self.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -609,6 +614,24 @@ class JsonTreeWidget(QTreeWidget):
         
         # Initialize default root sections
         self._initialize_root_sections()
+
+        # Connect signal for handling item edits (after initial load).
+        self.itemChanged.connect(self._on_item_changed)
+        self._remember_tree_texts()
+        self._initializing = False
+
+    def _remember_tree_texts(self) -> None:
+        for section in self._root_sections.values():
+            if section is None:
+                continue
+            self._remember_item_texts_recursive(section)
+
+    def _remember_item_texts_recursive(self, item: QTreeWidgetItem) -> None:
+        self._item_last_text[item] = item.text(0).strip()
+        for i in range(item.childCount()):
+            child = item.child(i)
+            if child is not None:
+                self._remember_item_texts_recursive(child)
 
     def _item_depth(self, item: QTreeWidgetItem) -> int:
         """Depth below a section header.
@@ -979,10 +1002,21 @@ class JsonTreeWidget(QTreeWidget):
         # Block recursion
         if self.signalsBlocked():
             return
+
+        # Ignore startup / programmatic updates that don't represent a real text edit.
+        if self._initializing:
+            return
             
         new_text = item.text(column).strip()
         if not new_text:
             return
+
+        last_text = self._item_last_text.get(item)
+        if last_text is not None and last_text == new_text:
+            return
+
+        # Update early so repeated non-text itemChanged events don't re-enter.
+        self._item_last_text[item] = new_text
         
         # Check if this item belongs to a section
         section_name = self._item_to_section.get(item)
@@ -1083,6 +1117,7 @@ class JsonTreeWidget(QTreeWidget):
             self.blockSignals(True)
             item.setText(column, canonical_text)
             self.blockSignals(False)
+            self._item_last_text[item] = canonical_text.strip()
         
         # Persist changes to disk after successful edit
         self._save_data()
@@ -1202,6 +1237,9 @@ class JsonTreeWidget(QTreeWidget):
         item = self._build_item(key, value, section_name=section_name)
         section.addChild(item)
 
+        # Remember baseline text for edit detection.
+        self._remember_item_texts_recursive(item)
+
         # Ensure consistent font sizing for sections that use smaller typography.
         if section_name.upper() in ("PROJECTS", "HISTORY"):
             self._update_section_item_font_sizes()
@@ -1244,6 +1282,9 @@ class JsonTreeWidget(QTreeWidget):
                     del self._item_to_section[child]
                 if child in self._item_to_key:
                     del self._item_to_key[child]
+
+                if child in self._item_last_text:
+                    del self._item_last_text[child]
                 
                 self._save_data()
                 return True
@@ -1300,9 +1341,15 @@ class JsonTreeWidget(QTreeWidget):
             app_data_dir = Path(__file__).parent.parent / "AppData"
             app_data_dir.mkdir(exist_ok=True)
             save_path = app_data_dir / "tree_data.json"
+
+            payload = json.dumps(self._data, ensure_ascii=False, sort_keys=True)
+            payload_hash = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+            if self._last_saved_hash == payload_hash:
+                return
             
             with open(save_path, 'w', encoding='utf-8') as f:
                 json.dump(self._data, f, indent=2, ensure_ascii=False)
+            self._last_saved_hash = payload_hash
             print(f"[INFO] Tree data saved to {save_path}")
         except Exception as e:
             print(f"[WARNING] Could not save tree data: {e}")
@@ -1317,8 +1364,19 @@ class JsonTreeWidget(QTreeWidget):
             if load_path.exists():
                 with open(load_path, 'r', encoding='utf-8') as f:
                     loaded_data = json.load(f)
+
+                # Restore internal data first so edits persist correctly.
+                if isinstance(loaded_data, dict):
+                    for section_name, section_data in loaded_data.items():
+                        if isinstance(section_data, dict):
+                            self._data[section_name] = section_data
+
+                # Snapshot hash so we don't immediately re-save identical content.
+                payload = json.dumps(self._data, ensure_ascii=False, sort_keys=True)
+                self._last_saved_hash = hashlib.sha256(payload.encode("utf-8")).hexdigest()
                     
                 # Restore all sections
+                self.blockSignals(True)
                 for section_name, section_data in loaded_data.items():
                     if section_name not in self._root_sections:
                         self._add_root_section(section_name)
@@ -1332,12 +1390,14 @@ class JsonTreeWidget(QTreeWidget):
                                 section.addChild(item)
                                 self._item_to_section[item] = section_name
                                 self._item_to_key[item] = key
+                                self._remember_item_texts_recursive(item)
                                 if section_name.upper() == "HISTORY":
                                     self._item_kind[item] = "history"
                                     badge = self._extract_history_badge(value)
                                     if badge:
                                         self._item_badge[item] = badge
                                     self._apply_item_icon(item)
+                self.blockSignals(False)
                 print(f"[INFO] Tree data loaded from {load_path}")
         except Exception as e:
             print(f"[INFO] Could not load tree data (this is normal on first run): {e}")
