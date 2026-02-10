@@ -66,7 +66,7 @@ data0=data[0].stdout
 data1=data[0].stderr
 '''
 '''
-data0_decoded=data0.decode("UTF-8")Über ein anderes
+data0_decoded=data0.decode("UTF-8")
 data1_decoded=data1.decode("UTF-8")
 print(f"{data0_decoded}{data1_decoded}{data}")
 #{data.stdout.decode("UTF-8")}{data.stderr.decode("UTF-8")}")
