@@ -21,6 +21,9 @@ build/
 # OS / editor
 .DS_Store
 .vscode/
+**/.vscode/
+**/*.code-workspace
+**/* copy.py
 
 # Internal notes (not part of reference source)
 AI_IDE_v1756/_Comments/
