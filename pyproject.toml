@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ai-ide-v1756"
+name = "alde"
 version = "0.0.0"
-description = "AI_IDE_v1756 packaged for local imports"
+description = "ALDE packaged for local imports"
 readme = "README.md"
 requires-python = ">=3.10"
 
@@ -14,4 +14,4 @@ include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["AI_IDE_v1756*"]
+include = ["ALDE*"]

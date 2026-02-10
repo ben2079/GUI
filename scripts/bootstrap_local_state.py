@@ -18,7 +18,7 @@ def main() -> int:
     root_dispatcher_example = repo / "dispatcher_doc_db.example.json"
     root_dispatcher = repo / "dispatcher_doc_db.json"
 
-    pkg_root = repo / "AI_IDE_v1756" / "AI_IDE_v1756"
+    pkg_root = repo / "ALDE" / "ALDE"
     pkg_appdata = pkg_root / "AppData"
 
     db_example = pkg_root / "db.example.json"
@@ -52,7 +52,7 @@ def main() -> int:
         _copy_if_missing(env_example, env_local)
 
     print("Bootstrapped local state (AppData dirs + example .env/db).")
-    print("Next: set OPENAI_API_KEY in AI_IDE_v1756/AI_IDE_v1756/.env (local, ignored).")
+    print("Next: set OPENAI_API_KEY in ALDE/ALDE/.env (local, ignored).")
     return 0
 
 

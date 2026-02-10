@@ -74,7 +74,7 @@ dispatcher_doc_db.json
 **/ai_ide/AppData/
 
 # Pre-restore snapshots (private / machine-specific)
-AI_IDE_v1756/AI_IDE_v1756/AppData__pre_restore_*/
+ALDE/ALDE/AppData__pre_restore_*/
 
 # Local vector-store artifacts (private / machine-specific)
 **/ai_ide/VSM_*_Data/
