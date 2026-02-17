@@ -382,7 +382,7 @@ class BatchFiles():
         """
         # If you need a specific parent directory structure, modify this line
         # Example: self.path = str(Path('./my_parent_dir') / dir)
-        self.path = str(Path('.') / dir) if dir else '.'
+        self.path = str(Path('.') / dir) if dir else str(Path('.'))
         self.batch_size = batch_size
 
     def _file_batches(self): 
