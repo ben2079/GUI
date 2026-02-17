@@ -368,11 +368,10 @@ class factory(ChatComEditor):
 
 class BatchFiles():
    
-    def __init__(self,dir, batch_size):
-            from pathlib import Path
+    def __init__(self, directory_name, batch_size):
             # Use relative path from project root or make it configurable
             base_path = Path(__file__).resolve().parent.parent / "data" / "HOST_AUDIT"
-            self.path = str(base_path / dir)
+            self.path = str(base_path / directory_name)
             self.batch_size = batch_size
 
     def _file_batches(self): 
