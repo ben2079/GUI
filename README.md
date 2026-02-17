@@ -2,6 +2,21 @@
 
 This repository contains the **AI IDE v1756** project (Python + PySide6/Qt) with a modular backend (RAG + agent workflows) and a local packaging setup.
 
+## ⚠️ Important: API Key Security
+
+**Before running this project:**
+1. Copy `ALDE/ALDE/.env.example` to `ALDE/ALDE/.env`
+2. Add your OpenAI API key to `.env`
+3. **NEVER commit `.env` files to Git**
+
+The `.gitignore` is pre-configured to protect your keys. For additional security, install the pre-commit hook:
+
+```bash
+bash scripts/install-hooks.sh
+```
+
+See [SECURITY.md](SECURITY.md) for detailed security guidelines.
+
 ## Quickstart
 
 If you cloned without submodules, initialize them first:
