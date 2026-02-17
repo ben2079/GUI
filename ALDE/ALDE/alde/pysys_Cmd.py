@@ -49,9 +49,10 @@ class sys_Cmd():
                               
 
 '''
-media_file="/home/benjamin/Vs_Code_Projects/audio.mp3"
-out=sys_Cmd.CmdSys(f'cvlc {media_file} c--audio-visual  glspectrum check=True')
-print(out.stdout.decode("utf-8"),out.stderr.decode("utf-8"))
+# Example usage - replace with your own media file path:
+# media_file = "path/to/your/audio.mp3"
+# out = sys_Cmd.CmdSys(f'cvlc {media_file} --audio-visual glspectrum check=True')
+# print(out.stdout.decode("utf-8"), out.stderr.decode("utf-8"))
 '''      
 
 '''

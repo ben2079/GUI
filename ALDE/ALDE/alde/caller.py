@@ -29,7 +29,7 @@ class Caller():
         spLit = str(spLit).split('.')
         self.s_ID = f'{spLit[0]}{spLit[1]}'                 
         self.path_read = ""
-        self.fileTl = "dbg"                                # first part"/home/ben/Vs_Code_Projects/Projects/GUI/Untitled-1"  of title file to write
+        self.fileTl = "dbg"                                # first part of title file to write (example: "dbg")
         self.path:str = ""
         self.path = self.get_path()                        # get path from sys.arg[]/__file__ / ..
         
@@ -370,7 +370,8 @@ class BatchFiles():
    
     def __init__(self,dir, batch_size):
             dir
-            self.path = f"/home/benjamin/Vs_Code_Projects/Projects/Projekt_IDS_IPS/HOST_AUDIT/{dir}"
+            # Use relative path or pass full path as parameter
+            self.path = f"./{dir}"  # Example: Use relative path
             self.batch_size = batch_size
 
     def _file_batches(self): 

@@ -45,9 +45,10 @@ def run_agent(job_data: dict, applicant_profile: dict) -> str:
 if __name__ == "__main__":
     # Applicant Profile laden
     applicant_profile = _SYSTEM_PROMPT['_PROFILE_PARSER']
-    # Job PDF laden
+    # Job PDF laden - use your own path
+    # Example: job_data = PyPDFLoader("path/to/your/job_posting.pdf").load()
     job_data = PyPDFLoader(
-        "/home/ben/Applications/Job_offers/IT - Administrator (m_w_d) bei ME Saar e.V. Verband d.Metall-u.Elektroind_.pdf"
+        "path/to/your/job_posting.pdf"  # Replace with actual path
     ).load()
     
     # Cover Letter generieren
