@@ -744,7 +744,8 @@ if __name__ == "__main__":
 #vsm_projekt = VectorStore(store_path=store_path, manifest_file=manifest_file)
 
 #vsm_projekt.build(GetPath()._parent(parg = f"{__file__} AppData VSM_1_Data"))
-#result = vsm_projekt.query( query="", filter_dict={'source':'/home/ben/Vs_Code_Projects/Projects/GUI/GUI/ALDE/AppData/VSM_1_Data/116117.de - Arzt- und Psychotherapeutensuche.pdf'}, k=k)
+# Example query with filter - replace with your own PDF path:
+# result = vsm_projekt.query(query="", filter_dict={'source':'path/to/your/document.pdf'}, k=k)
 #print(result)
 #manifest_file = GetPath()._parent(    parg = f"{__file__}"        ) + "AppData/VSM_1_Data/manifest.json"   
 #store_path = GetPath()._parent(    parg = f"{__file__}",        ) + "AppData/VSM_1_Data"  

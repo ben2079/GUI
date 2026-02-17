@@ -29,7 +29,7 @@ class Caller():
         spLit = str(spLit).split('.')
         self.s_ID = f'{spLit[0]}{spLit[1]}'                 
         self.path_read = ""
-        self.fileTl = "dbg"                                # first part"/home/ben/Vs_Code_Projects/Projects/GUI/Untitled-1"  of title file to write
+        self.fileTl = "dbg"                                # first part of title file to write (example: "dbg")
         self.path:str = ""
         self.path = self.get_path()                        # get path from sys.arg[]/__file__ / ..
         
@@ -368,10 +368,24 @@ class factory(ChatComEditor):
 
 class BatchFiles():
    
-    def __init__(self,dir, batch_size):
-            dir
-            self.path = f"/home/benjamin/Vs_Code_Projects/Projects/Projekt_IDS_IPS/HOST_AUDIT/{dir}"
-            self.batch_size = batch_size
+    def __init__(self, dir, batch_size):
+        """
+        Initialize BatchFiles processor.
+        
+        Args:
+            dir: Directory path (can be relative or absolute, or empty string for current dir)
+            batch_size: Number of files per batch
+            
+        Note: 
+        - Uses current working directory as base (Path('.'))
+        - To use script location instead: Path(__file__).resolve().parent / dir
+        - To use custom parent dir: Path('./my_parent_dir') / dir
+        """
+        # Constructs path relative to current working directory
+        # Note: Path('.') / '' results in Path('.'), making the conditional redundant,
+        # but kept for clarity when dir is explicitly an empty string vs. None
+        self.path = str(Path('.') / dir) if dir else str(Path('.'))
+        self.batch_size = batch_size
 
     def _file_batches(self): 
       

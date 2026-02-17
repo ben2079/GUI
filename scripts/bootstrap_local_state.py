@@ -52,7 +52,14 @@ def main() -> int:
         _copy_if_missing(env_example, env_local)
 
     print("Bootstrapped local state (AppData dirs + example .env/db).")
+    print("")
+    print("⚠️  SECURITY REMINDER:")
+    print("   • Never commit .env files")
+    print("   • Keep API keys out of code")
+    print("   • Use relative paths in examples")
+    print("")
     print("Next: set OPENAI_API_KEY in ALDE/ALDE/.env (local, ignored).")
+    print("Install pre-commit hook: bash scripts/install-hooks.sh")
     return 0
 
 

@@ -141,7 +141,7 @@ class AIWidget(QWidget):
         # ---- 1. Image-Button (links) --------------------------------
         self.img_btn = QPushButton()
         self.img_btn.setToolTip("Image create")
-        self.img_btn.setIcon(QIcon("/home/benjamin/Vs_Code_Projects/AI_Assistant/image_24dp_666666_FILL0_wght600_GRAD0_opsz40.png"))
+        self.img_btn.setIcon(QIcon("path/to/icons/image_icon.png"))
         self.img_btn.setIconSize(QSize(24, 24))
         #self.img_btn.setFlat(False)                           #  ←  kein Rahmen
         self.img_btn.clicked.connect    #  ←  richtiger Slot
@@ -159,7 +159,7 @@ class AIWidget(QWidget):
         # ---- 2. Send-Button (rechts) -------------------------------
         self.send_btn = QPushButton()
         self.send_btn.setToolTip("Nachricht senden")
-        self.send_btn.setIcon(QIcon("/home/benjamin/Vs_Code_Projects/AI_Assistant/symbols/send_24dp_666666_FILL1_wght400_GRAD0_opsz24.svg"))
+        self.send_btn.setIcon(QIcon("symbols/send_24dp_666666_FILL1_wght400_GRAD0_opsz24.svg"))
         self.send_btn.setIconSize(QSize(22, 22))
         self.send_btn.clicked.connect(self._send)
         #self.send_btn.setFlat(False)                          #  ebenfalls ohne Rahmen

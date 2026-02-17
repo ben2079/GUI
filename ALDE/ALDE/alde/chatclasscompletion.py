@@ -121,7 +121,9 @@ class ChatComEditor():
 
 if __name__ == "__main__":  
 
-    orpath = "/home/ben/Vs_Code_Projects/Projects/GUI/ALDE/"
+    # Example usage - this is test/example code
+    # Use relative path from this file's location for actual usage
+    orpath = str(Path(__file__).resolve().parent)
     path = os.path.join(orpath)
     file:list|str = "vector_smanager.py"
     _api_key = ""

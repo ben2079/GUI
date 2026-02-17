@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+import sys
 try:
     from .chat_completion import ChatCom  # type: ignore
 except Exception:
@@ -43,12 +44,20 @@ def run_agent(job_data: dict, applicant_profile: dict) -> str:
 
 
 if __name__ == "__main__":
+    # Example usage - this will fail without a valid PDF path
+    # To test this code, provide your own job posting PDF path
+    
+    if len(sys.argv) < 2:
+        print("Usage: python apply_agent.py <path_to_job_posting.pdf>")
+        print("Example: python apply_agent.py /path/to/job_posting.pdf")
+        sys.exit(1)
+    
+    job_pdf_path = sys.argv[1]
+    
     # Applicant Profile laden
     applicant_profile = _SYSTEM_PROMPT['_PROFILE_PARSER']
     # Job PDF laden
-    job_data = PyPDFLoader(
-        "/home/ben/Applications/Job_offers/IT - Administrator (m_w_d) bei ME Saar e.V. Verband d.Metall-u.Elektroind_.pdf"
-    ).load()
+    job_data = PyPDFLoader(job_pdf_path).load()
     
     # Cover Letter generieren
     result = run_agent(job_data, applicant_profile)

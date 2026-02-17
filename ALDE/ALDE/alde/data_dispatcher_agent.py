@@ -34,7 +34,7 @@ Du bekommst pro Lauf ein Objekt (oder äquivalenten Text), das mindestens enthä
 Optional:
 - `recursive`: bool (default: true)
 - `extensions`: Liste (default: [".pdf", ".PDF"])
-- `max_files`: int (default: keine Begrenzung)/home/ben/Vs_Code_Projects/Projects/GUI/ALDE/alde/Dokumente/_SYSTEM_PROMPT['_JOB_POSTING_PARSER'] = .md
+- `max_files`: int (default: keine Begrenzung)
 - `parser_agent_name`: string (default: "data_parser")
 - `dry_run`: bool (default: false)
 

@@ -9,7 +9,8 @@ from vector_smanager import _load_pdf, _log
 def test_specific_pdf():
     """Testet die PDF-Extraktion mit der erstellten Test-PDF"""
     
-    test_pdf = Path("/home/ben/Vs_Code_Projects/Projects/GUI/ALDE/test_document.pdf")
+    # Use relative path from this file's location
+    test_pdf = Path(__file__).resolve().parent.parent / "test_document.pdf"
     
     if not test_pdf.exists():
         _log("", f"Test-PDF nicht gefunden: {test_pdf}")
