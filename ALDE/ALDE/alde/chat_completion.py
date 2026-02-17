@@ -181,7 +181,10 @@ class Caller(ChatCompletion):
         self.file:str = ""                                # first partof title file to write
         
         if len(sys.argv) >=2: self.path_read = sys.argv[1] 
-        else: self.path_read = "./*/*"  # Use relative path pattern instead of hardcoded personal path
+        else: 
+            # Default to workspace root with wildcard pattern
+            # User should provide path via command line argument for production use
+            self.path_read = str(Path.cwd() / "*" / "*")
         
         self.workdir:str = GetPath().get_workdir()        # type: ignore # path to current working directory
         self.path_new:str = ""                            # get file from sys.arg[]

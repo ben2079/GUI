@@ -121,9 +121,9 @@ class ChatComEditor():
 
 if __name__ == "__main__":  
 
-    # Example: Use relative path from this file's location
-    # orpath = Path(__file__).resolve().parent  # Use this for actual runtime
-    orpath = "."  # Placeholder for testing
+    # Example usage - this is test/example code
+    # Use relative path from this file's location for actual usage
+    orpath = str(Path(__file__).resolve().parent)
     path = os.path.join(orpath)
     file:list|str = "vector_smanager.py"
     _api_key = ""
