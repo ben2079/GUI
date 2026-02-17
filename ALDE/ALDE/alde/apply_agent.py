@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+import sys
 try:
     from .chat_completion import ChatCom  # type: ignore
 except Exception:
@@ -45,7 +46,6 @@ def run_agent(job_data: dict, applicant_profile: dict) -> str:
 if __name__ == "__main__":
     # Example usage - this will fail without a valid PDF path
     # To test this code, provide your own job posting PDF path
-    import sys
     
     if len(sys.argv) < 2:
         print("Usage: python apply_agent.py <path_to_job_posting.pdf>")

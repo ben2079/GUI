@@ -373,7 +373,7 @@ class BatchFiles():
         Initialize BatchFiles processor.
         
         Args:
-            dir: Directory path (can be relative or absolute)
+            dir: Directory path (can be relative or absolute, or empty string for current dir)
             batch_size: Number of files per batch
             
         Note: 
@@ -382,6 +382,8 @@ class BatchFiles():
         - To use custom parent dir: Path('./my_parent_dir') / dir
         """
         # Constructs path relative to current working directory
+        # Note: Path('.') / '' results in Path('.'), making the conditional redundant,
+        # but kept for clarity when dir is explicitly an empty string vs. None
         self.path = str(Path('.') / dir) if dir else str(Path('.'))
         self.batch_size = batch_size
 
