@@ -368,11 +368,22 @@ class factory(ChatComEditor):
 
 class BatchFiles():
    
-    def __init__(self,dir, batch_size):
-            dir
-            # Use relative path or pass full path as parameter
-            self.path = str(Path('.') / dir) if dir else '.'
-            self.batch_size = batch_size
+    def __init__(self, dir, batch_size):
+        """
+        Initialize BatchFiles processor.
+        
+        Args:
+            dir: Directory path (can be relative or absolute)
+            batch_size: Number of files per batch
+            
+        Note: The original code used a hardcoded parent directory.
+        Pass the full path you want to use, or provide just the subdirectory name
+        and modify the path construction below to match your needs.
+        """
+        # If you need a specific parent directory structure, modify this line
+        # Example: self.path = str(Path('./my_parent_dir') / dir)
+        self.path = str(Path('.') / dir) if dir else '.'
+        self.batch_size = batch_size
 
     def _file_batches(self): 
       
