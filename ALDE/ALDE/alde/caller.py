@@ -371,7 +371,7 @@ class BatchFiles():
     def __init__(self,dir, batch_size):
             dir
             # Use relative path or pass full path as parameter
-            self.path = f"./{dir}"  # Example: Use relative path
+            self.path = str(Path('.') / dir) if dir else '.'
             self.batch_size = batch_size
 
     def _file_batches(self): 

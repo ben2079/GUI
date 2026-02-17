@@ -23,7 +23,7 @@ git clone --mirror . ../ALDE-backup.git
 # Remove patterns from history
 echo "Removing sensitive patterns from history..."
 git filter-repo --replace-text <(cat << 'EOF'
-sk-[a-zA-Z0-9]{20,}==>API_KEY_REMOVED
+sk-[a-zA-Z0-9_-]+==API_KEY_REMOVED
 /home/ben/==>/path/to/
 /home/benjamin/==>/path/to/
 OPENAI_API_KEY=sk-.*==>OPENAI_API_KEY=your_key_here

@@ -41,8 +41,8 @@ Run these checks before every commit:
 # Check for .env files
 git status | grep -i "\.env"
 
-# Check for potential API keys in staged changes
-git diff --cached | grep -E "sk-[a-zA-Z0-9]{20,}"
+# Check for potential API keys in staged changes (matches modern OpenAI key formats)
+git diff --cached | grep -E "sk-[a-zA-Z0-9_-]+"
 
 # Check for hardcoded personal paths
 git diff --cached | grep -E "/home/(ben|benjamin)/"
