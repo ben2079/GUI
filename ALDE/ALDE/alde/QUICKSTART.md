@@ -33,11 +33,11 @@
     "action": "generate_cover_letter",
     "job_posting": {
         "source": "file",
-        "value": "/home/ben/AppData/VSM_4_Data/job_posting.pdf"
+        "value": "AppData/VSM_4_Data/job_posting.pdf"
     },
     "applicant_profile": {
         "source": "file",
-        "value": "/home/ben/AppData/VSM_4_Data/cv_2026.pdf"
+        "value": "AppData/VSM_4_Data/cv_2026.pdf"
     },
     "options": {
         "language": "de",
@@ -94,7 +94,7 @@
 ```json
 {
     "action": "generate_cover_letters_batch",
-    "job_postings_dir": "/home/ben/AppData/VSM_4_Data/",
+    "job_postings_dir": "AppData/VSM_4_Data/",
     "profile_id": "profile_abc123",
     "options": {
         "language": "de",
@@ -222,7 +222,7 @@ write_document(
 ### Issue: "Profile not found"
 **Solution 1:** Check default location
 ```
-/home/ben/Vs_Code_Projects/Projects/GUI/ALDE/AppData/VSM_4_Data/applicant_profile.json
+ALDE/ALDE/AppData/applicant_profile.json
 ```
 
 **Solution 2:** Provide explicit profile

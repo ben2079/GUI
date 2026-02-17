@@ -120,9 +120,11 @@ class ChatComEditor():
 
 
 if __name__ == "__main__":  
-
-    orpath = "/home/ben/Vs_Code_Projects/Projects/GUI/ALDE/"
-    path = os.path.join(orpath)
+    from pathlib import Path
+    
+    # Use relative path from this file's location
+    orpath = Path(__file__).resolve().parent.parent
+    path = str(orpath)
     file:list|str = "vector_smanager.py"
     _api_key = ""
     editor= "gnome-text-edit"

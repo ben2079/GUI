@@ -29,7 +29,7 @@ class Caller():
         spLit = str(spLit).split('.')
         self.s_ID = f'{spLit[0]}{spLit[1]}'                 
         self.path_read = ""
-        self.fileTl = "dbg"                                # first part"/home/ben/Vs_Code_Projects/Projects/GUI/Untitled-1"  of title file to write
+        self.fileTl = "dbg"                                # first part of title file to write (e.g., "dbg" for debug files)
         self.path:str = ""
         self.path = self.get_path()                        # get path from sys.arg[]/__file__ / ..
         
@@ -369,8 +369,10 @@ class factory(ChatComEditor):
 class BatchFiles():
    
     def __init__(self,dir, batch_size):
-            dir
-            self.path = f"/home/benjamin/Vs_Code_Projects/Projects/Projekt_IDS_IPS/HOST_AUDIT/{dir}"
+            from pathlib import Path
+            # Use relative path from project root or make it configurable
+            base_path = Path(__file__).resolve().parent.parent / "data" / "HOST_AUDIT"
+            self.path = str(base_path / dir)
             self.batch_size = batch_size
 
     def _file_batches(self): 

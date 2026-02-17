@@ -1,5 +1,29 @@
 # ALDE
 
+## ⚠️ Security Notice - READ FIRST
+
+**Before using this application:**
+
+1. **🔐 Never commit your `.env` file** - It contains your API keys
+2. **🔑 Set `OPENAI_API_KEY` in `ALDE/ALDE/.env`** (see `.env.example` for template)
+3. **🛡️ Keep your API keys private** - Never share them or commit them to Git
+4. **📋 Read [SECURITY.md](SECURITY.md)** for complete security guidelines
+5. **🤝 Review [CONTRIBUTING.md](CONTRIBUTING.md)** before contributing
+
+**Quick Security Check:**
+```bash
+# Verify .env is ignored by Git
+git check-ignore ALDE/ALDE/.env
+# Should output: ALDE/ALDE/.env
+
+# Check for accidentally committed secrets
+./scripts/check_history_for_secrets.sh
+```
+
+---
+
+## About
+
 This repository contains the **AI IDE v1756** project (Python + PySide6/Qt) with a modular backend (RAG + agent workflows) and a local packaging setup.
 
 ## Quickstart

@@ -49,9 +49,11 @@ class sys_Cmd():
                               
 
 '''
-media_file="/home/benjamin/Vs_Code_Projects/audio.mp3"
-out=sys_Cmd.CmdSys(f'cvlc {media_file} c--audio-visual  glspectrum check=True')
-print(out.stdout.decode("utf-8"),out.stderr.decode("utf-8"))
+# Example usage with relative path or configured path
+# from pathlib import Path
+# media_file = Path(__file__).parent / "media" / "audio.mp3"
+# out=sys_Cmd.CmdSys(f'cvlc {media_file} --audio-visual glspectrum check=True')
+# print(out.stdout.decode("utf-8"),out.stderr.decode("utf-8"))
 '''      
 
 '''

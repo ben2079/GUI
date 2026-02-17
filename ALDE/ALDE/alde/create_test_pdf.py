@@ -9,6 +9,7 @@ import io
 
 def create_test_pdf():
     """Erstellt eine einfache Test-PDF mit deutschem Text"""
+    from pathlib import Path
     
     # PDF im Speicher erstellen
     buffer = io.BytesIO()
@@ -35,10 +36,14 @@ def create_test_pdf():
     pdf_data = buffer.getvalue()
     buffer.close()
     
-    with open("/home/ben/Vs_Code_Projects/Projects/GUI/ALDE/test_document.pdf", "wb") as f:
+    # Use relative path from this file's location
+    output_path = Path(__file__).resolve().parent.parent / "AppData" / "test_document.pdf"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    with open(output_path, "wb") as f:
         f.write(pdf_data)
     
-    print("Test-PDF erstellt: /home/ben/Vs_Code_Projects/Projects/GUI/ALDE/test_document.pdf")
+    print(f"Test-PDF erstellt: {output_path}")
 
 if __name__ == "__main__":
     try:

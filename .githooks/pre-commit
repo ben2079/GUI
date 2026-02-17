@@ -1,0 +1,59 @@
+#!/bin/bash
+# Pre-commit hook to prevent committing secrets
+# Install: cp .githooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -e
+
+echo "🔍 Checking for secrets in staged changes..."
+
+# Check for OpenAI API keys
+if git diff --cached | grep -E "sk-[A-Za-z0-9]{20,}"; then
+    echo ""
+    echo "❌ ERROR: Detected OpenAI API key in staged changes!"
+    echo ""
+    echo "API keys should never be committed. Use environment variables instead."
+    echo "Add your key to ALDE/ALDE/.env (this file is ignored by Git)."
+    echo ""
+    exit 1
+fi
+
+# Check for environment variable assignments with secrets
+if git diff --cached | grep -E "OPENAI_API_KEY\s*=\s*['\"]sk-"; then
+    echo ""
+    echo "❌ ERROR: Detected API key assignment in staged changes!"
+    echo ""
+    echo "Remove the API key from your code and use .env file instead."
+    echo ""
+    exit 1
+fi
+
+# Check for hardcoded personal paths
+if git diff --cached | grep -E "/home/(ben|benjamin)/"; then
+    echo ""
+    echo "⚠️  WARNING: Detected hardcoded personal path in staged changes!"
+    echo ""
+    echo "Replace absolute paths with relative paths using pathlib:"
+    echo "  from pathlib import Path"
+    echo "  path = Path(__file__).parent / 'relative/path'"
+    echo ""
+    read -p "Do you want to commit anyway? (yes/no) " -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy][Ee][Ss]$ ]]; then
+        exit 1
+    fi
+fi
+
+# Check for .env files (should never be committed)
+if git diff --cached --name-only | grep -E "\.env$" | grep -v "\.env\.example$"; then
+    echo ""
+    echo "❌ ERROR: Attempting to commit .env file!"
+    echo ""
+    echo "The .env file contains secrets and should never be committed."
+    echo "Remove it from staged changes:"
+    echo "  git reset HEAD ALDE/ALDE/.env"
+    echo ""
+    exit 1
+fi
+
+echo "✅ No secrets detected in staged changes"
+exit 0

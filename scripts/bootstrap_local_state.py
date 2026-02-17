@@ -52,7 +52,17 @@ def main() -> int:
         _copy_if_missing(env_example, env_local)
 
     print("Bootstrapped local state (AppData dirs + example .env/db).")
-    print("Next: set OPENAI_API_KEY in ALDE/ALDE/.env (local, ignored).")
+    print("")
+    print("⚠️  SECURITY REMINDERS:")
+    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print("1. 🔑 Set OPENAI_API_KEY in ALDE/ALDE/.env (never commit this file)")
+    print("2. 🛡️  The .env file is ignored by Git - keep it private")
+    print("3. 📋 Review SECURITY.md for best practices")
+    print("4. 🔍 Run './scripts/check_history_for_secrets.sh' to scan for secrets")
+    print("5. 🤝 Read CONTRIBUTING.md before making changes")
+    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print("")
+    print("Next: Edit ALDE/ALDE/.env and add your OpenAI API key")
     return 0
 
 
