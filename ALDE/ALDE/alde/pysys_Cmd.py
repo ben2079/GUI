@@ -51,7 +51,7 @@ class sys_Cmd():
 '''
 # Example usage - replace with your own media file path:
 # media_file = "path/to/your/audio.mp3"
-# out = sys_Cmd.CmdSys(f'cvlc {media_file} --audio-visual glspectrum check=True')
+# out = sys_Cmd.CmdSys(f'cvlc {media_file} --audio-visual glspectrum', check=True)
 # print(out.stdout.decode("utf-8"), out.stderr.decode("utf-8"))
 '''      
 

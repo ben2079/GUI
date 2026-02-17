@@ -376,12 +376,12 @@ class BatchFiles():
             dir: Directory path (can be relative or absolute)
             batch_size: Number of files per batch
             
-        Note: The original code used a hardcoded parent directory.
-        Pass the full path you want to use, or provide just the subdirectory name
-        and modify the path construction below to match your needs.
+        Note: 
+        - Uses current working directory as base (Path('.'))
+        - To use script location instead: Path(__file__).resolve().parent / dir
+        - To use custom parent dir: Path('./my_parent_dir') / dir
         """
-        # If you need a specific parent directory structure, modify this line
-        # Example: self.path = str(Path('./my_parent_dir') / dir)
+        # Constructs path relative to current working directory
         self.path = str(Path('.') / dir) if dir else str(Path('.'))
         self.batch_size = batch_size
 
